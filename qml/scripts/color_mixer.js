@@ -1,3 +1,5 @@
+// from https://github.com/AndreasSoiron/Color_mixer suggest here https://stackoverflow.com/questions/14819058/mixing-two-colors-naturally-in-javascript
+
 function hex2dec(hex) {
   return hex.replace('#', '').match(/.{2}/g).map(n => parseInt(n, 16));
 }
