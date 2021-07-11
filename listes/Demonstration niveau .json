@@ -1,0 +1,56 @@
+{
+    "catégorie": "Demonstration",
+    "tags": [],
+    "mode": "dictionnaire",
+    "liste": [
+        [
+            "Pas de donnée",
+            "jamais tester",
+            "",
+            -1
+        ],
+        [
+            "inconnu",
+            "niveau très faible",
+            "",
+            0
+        ],
+        [
+            "débutant",
+            "niveau faible",
+            "",
+            1
+        ],
+        [
+            "intermédiaire",
+            "niveau moyen (deux niveau)",
+            "",
+            2
+        ],
+        [
+            "intermédiaire",
+            "niveau moyen ",
+            "",
+            3
+        ],
+        [
+            "avancé",
+            "bon niveau",
+            "",
+            4
+        ],
+        [
+            "maitrisé",
+            "très bon niveau",
+            "",
+            5
+        ],
+        [
+            "parfait",
+            "très bon niveau de façon régulière",
+            "",
+            6
+        ]
+    ],
+    "historique": []
+}

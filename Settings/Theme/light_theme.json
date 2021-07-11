@@ -1,0 +1,12 @@
+{
+  "theme_name" : "light",
+
+  "light_text_color" :  "#121216",
+  "medium_text_color": "#40404F",
+  "light_color": "#E9E9ED",
+  "medium_color": "#D2D2DA",
+  "darker_color": "#BCBCC8",
+  "accent_color": "#80DED9",
+  "dark_accent_color": "#32C3BB",
+  "mouseOver_color": "#C7C7D1"
+}

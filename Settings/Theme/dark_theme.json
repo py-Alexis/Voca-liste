@@ -1,0 +1,13 @@
+{
+  "theme_name" : "dark",
+
+  "light_text_color" :  "#ffffff",
+  "medium_text_color": "#5f6a82",
+  "light_color": "#2C313C",
+  "medium_color": "#282C34",
+  "darker_color": "#1C1D20",
+  "accent_color": "#00a1f1",
+  "dark_accent_color": "#00527A",
+  "mouseOver_color": "#23282e"
+}
+

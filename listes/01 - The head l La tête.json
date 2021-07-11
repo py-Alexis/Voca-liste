@@ -1,0 +1,296 @@
+{
+    "catégorie": "Voca Book",
+    "tags": [],
+    "mode": "langue",
+    "liste": [
+        [
+            "the head",
+            "la tête",
+            "",
+            1
+        ],
+        [
+            "the face",
+            "le visage",
+            "",
+            0
+        ],
+        [
+            "blue-eyed",
+            "aux yeux bleus",
+            "",
+            2
+        ],
+        [
+            "the eyebrows",
+            "les sourcils",
+            "",
+            -1
+        ],
+        [
+            "the eyelids",
+            "les paupières",
+            "",
+            0
+        ],
+        [
+            "the nose",
+            "le nez",
+            "",
+            0
+        ],
+        [
+            "the cheeks",
+            "les joues",
+            "",
+            1
+        ],
+        [
+            "the chin",
+            "le menton",
+            "",
+            1
+        ],
+        [
+            "the nape of the neck",
+            "la nuque",
+            "",
+            1
+        ],
+        [
+            "the tongue",
+            "la langue",
+            "",
+            1
+        ],
+        [
+            "the jaws",
+            " les mâchoires",
+            "",
+            1
+        ],
+        [
+            "a tooth (plu. teeth)",
+            "une dent",
+            "",
+            1
+        ],
+        [
+            "the features [i:]",
+            "les traits (visage)",
+            "",
+            1
+        ],
+        [
+            "a beauty spot / a mole",
+            "les grain de beauté",
+            "",
+            0
+        ],
+        [
+            "wrinkles / lines",
+            "des rides",
+            "",
+            1
+        ],
+        [
+            "the hair (sing.)",
+            "la chevelure",
+            "",
+            1
+        ],
+        [
+            "hairy",
+            "chevelu, poilu",
+            "",
+            2
+        ],
+        [
+            "fair / blond(e) hair",
+            "des cheveux blonds",
+            "",
+            0
+        ],
+        [
+            "red / gringer hair",
+            "des cheveux roux",
+            "",
+            0
+        ],
+        [
+            "a curl",
+            "une boucle",
+            "",
+            1
+        ],
+        [
+            "bearded",
+            "barbu",
+            "",
+            0
+        ],
+        [
+            "bald",
+            "chauve",
+            "",
+            0
+        ],
+        [
+            "whiskers",
+            "des favoris",
+            "",
+            2
+        ],
+        [
+            "a moustache",
+            "une moustache",
+            "",
+            1
+        ],
+        [
+            "the skull",
+            "le crâne",
+            "",
+            1
+        ],
+        [
+            "the eyes",
+            "les yeux",
+            "",
+            1
+        ],
+        [
+            "fair-haired",
+            "aux cheveux blonds",
+            "",
+            2
+        ],
+        [
+            "the eyelashes",
+            "les cils",
+            "",
+            1
+        ],
+        [
+            "the temples",
+            "les tempes",
+            "",
+            1
+        ],
+        [
+            "the ears",
+            "les oreilles",
+            "",
+            0
+        ],
+        [
+            "the cheekbones",
+            "les pommettes",
+            "",
+            0
+        ],
+        [
+            "the forehead",
+            "le front",
+            "",
+            0
+        ],
+        [
+            "the throat",
+            "la gorge",
+            "",
+            1
+        ],
+        [
+            "the mouth",
+            "la bouche",
+            "",
+            1
+        ],
+        [
+            "the lips",
+            "les lèvres",
+            "",
+            0
+        ],
+        [
+            "the gums",
+            "les gencives",
+            "",
+            1
+        ],
+        [
+            "the complexion",
+            "le teint",
+            "",
+            1
+        ],
+        [
+            "pimples",
+            "des boutons",
+            "",
+            1
+        ],
+        [
+            "freckles",
+            "des taches de rousseur",
+            "",
+            1
+        ],
+        [
+            "a wrinkled face",
+            " un visage ridé",
+            "",
+            1
+        ],
+        [
+            "a hair",
+            "un cheveux, un poil",
+            "",
+            1
+        ],
+        [
+            "dard hair",
+            "des cheveux bruns",
+            "",
+            1
+        ],
+        [
+            "jet-black hair",
+            "des cheveux d'ébène",
+            "",
+            1
+        ],
+        [
+            "a lock",
+            "une mèche",
+            "",
+            1
+        ],
+        [
+            "a beard",
+            "une barbe",
+            "",
+            0
+        ],
+        [
+            "beardless",
+            "imberbe",
+            "",
+            1
+        ],
+        [
+            "a goatee",
+            "un bouc",
+            "",
+            1
+        ],
+        [
+            "sideboards / sideburns",
+            "des pattes",
+            "",
+            2
+        ]
+    ],
+    "historique": []
+}

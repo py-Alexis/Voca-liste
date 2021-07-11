@@ -1,0 +1,32 @@
+{
+    "catégorie": "None",
+    "tags": [],
+    "mode": "dictionnaire",
+    "liste": [
+        [
+            "non",
+            "no",
+            "",
+            -1
+        ],
+        [
+            "oui",
+            "yes",
+            "",
+            -1
+        ],
+        [
+            "peut-être",
+            "maybe",
+            "",
+            -1
+        ],
+        [
+            "bientôt",
+            "soon",
+            "",
+            -1
+        ]
+    ],
+    "historique": []
+}

@@ -1,0 +1,37 @@
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
+Rectangle{
+    height: row.height
+    width: row.width
+    radius: 5
+    color: pairCellColor
+    Row{
+        id: row
+
+        Cell{
+            cellText: "cell_1"
+            row: 0
+            column:0
+            cellWidth: scrollView.width / 5
+        }
+        Cell{
+            cellText: "cell_2"
+            row: 0
+            column:1
+            cellWidth: scrollView.width / 5
+        }
+        Cell{
+            cellText: "cell_3"
+            row: 0
+            column:2
+            cellWidth: (scrollView.width / 5)*2
+        }
+        LevelCell{
+            cellText: "cell_4"
+            row: 0
+            column:3
+            cellWidth: scrollView.width / 5
+        }
+    }
+}
