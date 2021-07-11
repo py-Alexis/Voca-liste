@@ -453,7 +453,7 @@ Window {
             Label {
                 id: labelBottomInfo
                 color: medium_text_color
-                text: qsTr("Application description")
+                text: qsTr("Version d'essai par py-Alexis")
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top
@@ -461,7 +461,7 @@ Window {
                 verticalAlignment: Text.AlignVCenter
                 antialiasing: false
                 anchors.leftMargin: 10
-                anchors.rightMargin: 50
+                anchors.rightMargin: 100
                 anchors.bottomMargin: 0
                 anchors.topMargin: 0
             }
@@ -469,7 +469,7 @@ Window {
             Label {
                 id: bottomRightInfo1
                 color: medium_text_color
-                text: qsTr("| V 1.0.0")
+                text: qsTr("| Beta 1.0")
                 anchors.left: labelBottomInfo.right
                 anchors.right: parent.right
                 anchors.top: parent.top
@@ -691,6 +691,6 @@ Window {
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.5}
+    D{i:0;height:500;width:1000}
 }
 ##^##*/
