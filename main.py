@@ -1,11 +1,10 @@
 # This Python file uses the following encoding: utf-8
 import sys
 import os, shutil, glob
-import time
 
 from PySide2.QtGui import QGuiApplication, QIcon
 from PySide2.QtQml import QQmlApplicationEngine
-from PySide2.QtCore import QObject, Slot, Signal, QUrl
+from PySide2.QtCore import QObject, Slot, Signal
 
 import json
 
