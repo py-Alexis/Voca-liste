@@ -374,7 +374,7 @@ class MainWindow(QObject):
 
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
-    engine = QQmlApplicationEngine()
+    engine = QQmlApplicationEngine(parent=app)
 
     app.setWindowIcon(QIcon("images/icon_app_top.svg"))
 

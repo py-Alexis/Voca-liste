@@ -31,6 +31,7 @@ Window {
     property color dark_accent_color: "#00527A"
     property color mouseOver_color: "#23282e"
 
+    property bool okToClose: false
 
     QtObject{
         id: internal
@@ -106,7 +107,22 @@ Window {
     visible: true
     color: "#00000000"
     title: "Voca-list"
+    onClosing: { // for some reason qt creator raise an error "invalid property name "onClosing" but it's working
+        if(isActiveTopBar === false){
+            if(okToClose === false){
+                close.accepted = false
+                console.log("oui")
+                backend.closeAsk()
+            }
+        } // else do nothing => close app
 
+
+
+
+        /* closeAsk ask the current page if it's ok to close (with a pop up message in modify for example)
+        and if it's ok the page do backend.close() that emit a sendClose signal that close the page */
+
+    }
 
 
     Rectangle {
@@ -684,6 +700,7 @@ Window {
         }
 
         function onSendClose(){
+            okToClose = true
             window.close()
         }
     }
