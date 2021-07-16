@@ -371,6 +371,27 @@ class MainWindow(QObject):
 
     # ------------  FIN Modify  -----------
 
+    # -------------------------------------
+    # ---------  Revision Selector  -------
+    # -------------------------------------
+
+    sendListInfo = Signal(int, int)
+    @Slot(str)
+    def getListInfo(self, liste):
+        # Send list info: number of word in the list and percentage
+        content_liste = self.read(liste)
+
+        nb_word = len(content_liste["liste"])
+        lv_sum = 0
+
+        for element in content_liste["liste"]:
+            if element[3] != -1:
+                lv_sum += element[3]
+
+        self.sendListInfo.emit(nb_word, (lv_sum/(nb_word * 6)) * 100)
+
+    # -------  Fin Revision Selector ------
+
 
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)

@@ -265,6 +265,18 @@ Item {
 
             visible: listIsSelected
 
+            CustomTextButton{
+                id: reviseBtn
+                anchors.left: parent.left
+                anchors.leftMargin: 0
+                textBtn: "Réviser |"
+
+                btnTextColor: light_text_color
+                btnTextColorDown: medium_text_color
+
+                onClicked: {stackView.replace(Qt.resolvedUrl("../pages/RevisionSelector.qml")); backend.getListInfo(currentList)}
+            }
+
             Rectangle{
                 id: rectangle
                 color: light_color
