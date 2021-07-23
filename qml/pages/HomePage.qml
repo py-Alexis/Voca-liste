@@ -97,378 +97,375 @@ Item {
         }
     }
 
-    Rectangle {
-        id: listList
+    Rectangle{
+        id: bg
+        anchors.fill: parent
+        anchors.topMargin: 25
 
-        width: 375
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        clip: true
-        anchors.topMargin: 0
-        anchors.bottomMargin: 0
-        anchors.leftMargin: 0
+        Rectangle {
+            id: listList
 
-        color: light_color
-
-        Rectangle{
-            id: listListHeader
-            height: 30
+            width: 375
             anchors.left: parent.left
-            anchors.right: parent.right
             anchors.top: parent.top
-            anchors.rightMargin: 20
-            anchors.leftMargin: 20
-            anchors.topMargin: 20
-            radius: 5
+            anchors.bottom: parent.bottom
+            clip: true
+            anchors.topMargin: 0
+            anchors.bottomMargin: 0
+            anchors.leftMargin: 0
 
-            color: medium_color
+            color: light_color
 
-            CustomTextButton{
-                id: nouveauBtn
-                textBtn: "nouveau |"
-
-                btnTextColor: light_text_color
-                btnTextColorDown: medium_text_color
-
-                onClicked: newFolder()//stackView.push(Qt.resolvedUrl("../pages/Modify.qml"))
-
-                Dialog {
-                    id: newFolderDialog
-                    title: "New folder"
-                    height: 150
-                    width: 300
-                    standardButtons: StandardButton.Ok | StandardButton.Cancel
-
-                    TextField {
-                        id: newFolderInput
-                        width: parent.width * 0.75
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        focus: true
-                    }
-
-                    onAccepted:{
-                        console.log(newFolderInput.text)
-                        backend.checkName(newFolderInput.text)
-                        newFolderInput.text = ""
-                    }
-                    onRejected:{
-                        console.log("c'est non finalement")
-                        newFolderInput.text = ""
-                    }
-
-                }
-
-                MessageDialog{
-                    id: messageDialog
-
-                    title: "Problème avec la création de la liste"
-                    text: ""
-                    detailedText: ""
-
-                    standardButtons: StandardButton.Ok
-
-                    icon: StandardIcon.Warning
-
-
-                }
-                function newFolder() {
-                    newFolderDialog.open()
-                    newFolderInput.focus = true
-                }
-
-
-            }
-            CustomTextButton{
-                id: importBtn
+            Rectangle{
+                id: listListHeader
+                height: 30
+                anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.rightMargin: 0
-                textBtn: "| import"
+                anchors.top: parent.top
+                anchors.rightMargin: 20
+                anchors.leftMargin: 20
+                anchors.topMargin: 20
+                radius: 5
 
-                btnTextColor: light_text_color
-                btnTextColorDown: medium_text_color
+                color: medium_color
 
-                onClicked: fileImport.open()
+                CustomTextButton{
+                    id: nouveauBtn
+                    textBtn: "nouveau |"
 
-                FileDialog{
-                    id: fileImport
-                    title: "Choisir le fichier à importer"
-                    folder: shortcuts.desktop
-                    selectMultiple: true
-                    nameFilters: ["fichier de liste (*.json)"]
-                    onAccepted: {
-                        backend.importListe(fileImport.fileUrls)
-                        internal.reloadListList()
+                    btnTextColor: light_text_color
+                    btnTextColorDown: medium_text_color
+
+                    onClicked: newFolder()//stackView.push(Qt.resolvedUrl("../pages/Modify.qml"))
+
+                    Dialog {
+                        id: newFolderDialog
+                        title: "New folder"
+                        height: 150
+                        width: 300
+                        standardButtons: StandardButton.Ok | StandardButton.Cancel
+
+                        TextField {
+                            id: newFolderInput
+                            width: parent.width * 0.75
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            focus: true
+                        }
+
+                        onAccepted:{
+                            console.log(newFolderInput.text)
+                            backend.checkName(newFolderInput.text)
+                            newFolderInput.text = ""
+                        }
+                        onRejected:{
+                            console.log("c'est non finalement")
+                            newFolderInput.text = ""
+                        }
+                    }
+
+                    MessageDialog{
+                        id: messageDialog
+
+                        title: "Problème avec la création de la liste"
+                        text: ""
+                        detailedText: ""
+
+                        standardButtons: StandardButton.Ok
+
+                        icon: StandardIcon.Warning
+
+
+                    }
+                    function newFolder() {
+                        newFolderDialog.open()
+                        newFolderInput.focus = true
                     }
                 }
+                CustomTextButton{
+                    id: importBtn
+                    anchors.right: parent.right
+                    anchors.rightMargin: 0
+                    textBtn: "| import"
 
+                    btnTextColor: light_text_color
+                    btnTextColorDown: medium_text_color
 
+                    onClicked: fileImport.open()
+
+                    FileDialog{
+                        id: fileImport
+                        title: "Choisir le fichier à importer"
+                        folder: shortcuts.desktop
+                        selectMultiple: true
+                        nameFilters: ["fichier de liste (*.json)"]
+                        onAccepted: {
+                            backend.importListe(fileImport.fileUrls)
+                            internal.reloadListList()
+                        }
+                    }
+                }
             }
+
+
+            Rectangle {
+                id: listListContainer
+                color: "#00000000"
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: listListHeader.bottom
+                anchors.bottom: parent.bottom
+                anchors.rightMargin: 0
+                anchors.leftMargin: 0
+                anchors.bottomMargin: 0
+                anchors.topMargin: 20
+
+                ScrollView {
+                    id: settingsScrollView
+                    anchors.fill: parent
+                    clip: true
+
+                    Column {
+                        id: settingsColumn
+                        anchors.fill: parent
+                    }
+                }
+            }
+
 
         }
 
-
         Rectangle {
-            id: listListContainer
-            color: "#00000000"
-            anchors.left: parent.left
+            id: detailList
+
+            anchors.left: listList.right
             anchors.right: parent.right
-            anchors.top: listListHeader.bottom
+            anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.rightMargin: 0
             anchors.leftMargin: 0
             anchors.bottomMargin: 0
-            anchors.topMargin: 20
+            anchors.topMargin: 0
 
-            ScrollView {
-                id: settingsScrollView
-                anchors.fill: parent
-                clip: true
+            color: light_color
 
-                Column {
-                    id: settingsColumn
-                    anchors.fill: parent
+            Rectangle {
+                id: buttonBar
+                height: 30
+                color: medium_color
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.rightMargin: 20
+                anchors.leftMargin: 20
+                anchors.topMargin: 20
+
+                radius: 5
+
+                visible: listIsSelected
+
+                CustomTextButton{
+                    id: reviseBtn
+                    anchors.left: parent.left
+                    anchors.leftMargin: 0
+                    textBtn: "Réviser |"
+
+                    btnTextColor: light_text_color
+                    btnTextColorDown: medium_text_color
+
+                    onClicked: {stackView.replace(Qt.resolvedUrl("../pages/RevisionSelector.qml")); backend.getListInfo(currentList)}
+                }
+
+                Rectangle{
+                    id: rectangle
+                    color: light_color
+                    height: parent.height
+                    radius: parent.radius
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: currentListLabel.width + 75
+
+                    Label {
+                        id: currentListLabel
+                        text: currentList
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pointSize: 15
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+
+
+                        color: light_text_color
+                    }
+                }
+
+
+                CustomTextButton{
+                    id: modifyBtn
+                    anchors.right: parent.right
+                    anchors.rightMargin: 0
+                    textBtn: "| modifier"
+
+                    btnTextColor: light_text_color
+                    btnTextColorDown: medium_text_color
+
+                    onClicked: {modifierClicked = true; stackView.replace(Qt.resolvedUrl("../pages/Modify.qml")); backend.createTable(currentList)}
+                }
+
+                CustomTextButton{
+                    id: supBtn
+                    anchors.right: modifyBtn.left
+                    anchors.rightMargin: -10
+                    textBtn: "| supprimer"
+
+                    btnTextColor: light_text_color
+                    btnTextColorDown: medium_text_color
+
+                    onClicked: areYouSureDialog.open()
+
+                    MessageDialog{
+                        id: areYouSureDialog
+
+                        title: "Etes vous sûr"
+                        text: "Etes vous sûr de supprimer cette liste (cette action est irreversible)"
+                        detailedText: ""
+
+                        standardButtons: StandardButton.Yes | StandardButton.No
+
+                        icon: StandardIcon.Critical
+
+                        onYes:{
+                            backend.supprimer(currentList)
+                            internal.reloadListList()
+
+                        }
+                    }
                 }
             }
-        }
 
-
-    }
-
-    Rectangle {
-        id: detailList
-
-        anchors.left: listList.right
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.rightMargin: 0
-        anchors.leftMargin: 0
-        anchors.bottomMargin: 0
-        anchors.topMargin: 0
-
-        color: light_color
-
-        Rectangle {
-            id: buttonBar
-            height: 30
-            color: medium_color
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.rightMargin: 20
-            anchors.leftMargin: 20
-            anchors.topMargin: 20
-
-            radius: 5
-
-            visible: listIsSelected
-
-            CustomTextButton{
-                id: reviseBtn
+            Rectangle {
+                id: graph
+                height: parent.height / 3
+                color: medium_color
                 anchors.left: parent.left
-                anchors.leftMargin: 0
-                textBtn: "Réviser |"
+                anchors.right: parent.right
+                anchors.top: buttonBar.bottom
+                anchors.rightMargin: 20
+                anchors.leftMargin: 20
+                anchors.topMargin: 20
 
-                btnTextColor: light_text_color
-                btnTextColorDown: medium_text_color
+                radius: 5
 
-                onClicked: {stackView.replace(Qt.resolvedUrl("../pages/RevisionSelector.qml")); backend.getListInfo(currentList)}
+                visible: listIsSelected
+
+                Label {
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pointSize: 25
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    color: medium_text_color
+
+                    text: "NO DATA"
+
+                    opacity: 0.3
+                }
             }
 
             Rectangle{
-                id: rectangle
+                id: wordDisplayHeader
+
+                height: labelMot.height+10
+
+
+
                 color: light_color
-                height: parent.height
-                radius: parent.radius
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: currentListLabel.width + 75
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: graph.bottom
+                anchors.topMargin: 20
+                anchors.rightMargin: 20
+                anchors.leftMargin: 20
 
-                Label {
-                    id: currentListLabel
-                    text: currentList
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: 15
-                    anchors.horizontalCenter: parent.horizontalCenter
+                visible: listIsSelected
 
+                Row{
+                    id: row
+                    anchors.fill: parent
 
+                    Label{
+                        id: labelMot
+                        leftPadding: 5
+                        width: (parent.width) / 5
+                        color: medium_text_color
 
-                    color: light_text_color
+                        text: if(currentMode === "langue"){"Expression"}else{"Mot"}
+                        anchors.verticalCenter: parent.verticalCenter
+                        wrapMode: Label.Wrap
+                    }
+
+                    Label{
+                        id: labelDef
+                        leftPadding: 5
+                        width: (parent.width) / 5
+                        color: medium_text_color
+
+                        text: if(currentMode === "langue"){"Traduction"}else{"Définition"}
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        wrapMode: Label.Wrap
+                    }
+                    Label{
+                        id: labelContext
+                        leftPadding: 5
+                        width: (2 * (parent.width)) / 5
+                        color: medium_text_color
+
+                        text: "Contexte"
+                        anchors.verticalCenter: parent.verticalCenter
+                        wrapMode: Label.Wrap
+                    }
+                    Label{
+                        id: labelLv
+                        rightPadding: 15
+                        width: (parent.width) / 5
+                        color: medium_text_color
+
+                        text: "Niveau"
+                        anchors.verticalCenter: parent.verticalCenter
+                        horizontalAlignment: Text.AlignRight
+                        wrapMode: Label.Wrap
+                    }
                 }
             }
 
+            Rectangle{
+                id: wordDisplay
 
-            CustomTextButton{
-                id: modifyBtn
+                anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.rightMargin: 0
-                textBtn: "| modifier"
+                anchors.top: wordDisplayHeader.bottom
+                anchors.bottom: parent.bottom
+                anchors.rightMargin: 20
+                anchors.leftMargin: 20
+                anchors.bottomMargin: 20
+                anchors.topMargin: 0
 
-                btnTextColor: light_text_color
-                btnTextColorDown: medium_text_color
+                visible: listIsSelected
+                color: "#00000000"
 
-                onClicked: {modifierClicked = true; stackView.replace(Qt.resolvedUrl("../pages/Modify.qml")); backend.createTable(currentList)}
-            }
+                ScrollView {
+                    id: listMotScrollView
+                    anchors.fill: parent
+                    clip: true
 
-            CustomTextButton{
-                id: supBtn
-                anchors.right: modifyBtn.left
-                anchors.rightMargin: -10
-                textBtn: "| supprimer"
-
-                btnTextColor: light_text_color
-                btnTextColorDown: medium_text_color
-
-                onClicked: areYouSureDialog.open()
-
-                MessageDialog{
-                    id: areYouSureDialog
-
-                    title: "Etes vous sûr"
-                    text: "Etes vous sûr de supprimer cette liste (cette action est irreversible)"
-                    detailedText: ""
-
-                    standardButtons: StandardButton.Yes | StandardButton.No
-
-                    icon: StandardIcon.Critical
-
-                    onYes:{
-                        backend.supprimer(currentList)
-                        internal.reloadListList()
-
+                    Column{
+                        id: listMotColumn
+                        anchors.fill: parent
                     }
                 }
             }
         }
-
-        Rectangle {
-            id: graph
-            height: parent.height / 3
-            color: medium_color
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: buttonBar.bottom
-            anchors.rightMargin: 20
-            anchors.leftMargin: 20
-            anchors.topMargin: 20
-
-            radius: 5
-
-            visible: listIsSelected
-
-            Label {
-                anchors.verticalCenter: parent.verticalCenter
-                font.pointSize: 25
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                color: medium_text_color
-
-                text: "NO DATA"
-
-                opacity: 0.3
-            }
-        }
-
-        Rectangle{
-            id: wordDisplayHeader
-
-            height: labelMot.height+10
-
-
-
-            color: light_color
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: graph.bottom
-            anchors.topMargin: 20
-            anchors.rightMargin: 20
-            anchors.leftMargin: 20
-
-            visible: listIsSelected
-
-            Row{
-                id: row
-                anchors.fill: parent
-
-                Label{
-                    id: labelMot
-                    leftPadding: 5
-                    width: (parent.width) / 5
-                    color: medium_text_color
-
-                    text: if(currentMode === "langue"){"Expression"}else{"Mot"}
-                    anchors.verticalCenter: parent.verticalCenter
-                    wrapMode: Label.Wrap
-                }
-
-                Label{
-                    id: labelDef
-                    leftPadding: 5
-                    width: (parent.width) / 5
-                    color: medium_text_color
-
-                    text: if(currentMode === "langue"){"Traduction"}else{"Définition"}
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    wrapMode: Label.Wrap
-                }
-                Label{
-                    id: labelContext
-                    leftPadding: 5
-                    width: (2 * (parent.width)) / 5
-                    color: medium_text_color
-
-                    text: "Contexte"
-                    anchors.verticalCenter: parent.verticalCenter
-                    wrapMode: Label.Wrap
-                }
-                Label{
-                    id: labelLv
-                    rightPadding: 15
-                    width: (parent.width) / 5
-                    color: medium_text_color
-
-                    text: "Niveau"
-                    anchors.verticalCenter: parent.verticalCenter
-                    horizontalAlignment: Text.AlignRight
-                    wrapMode: Label.Wrap
-                }
-            }
-
-        }
-
-        Rectangle{
-            id: wordDisplay
-
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: wordDisplayHeader.bottom
-            anchors.bottom: parent.bottom
-            anchors.rightMargin: 20
-            anchors.leftMargin: 20
-            anchors.bottomMargin: 20
-            anchors.topMargin: 0
-
-            visible: listIsSelected
-            color: "#00000000"
-
-            ScrollView {
-                id: listMotScrollView
-                anchors.fill: parent
-                clip: true
-
-                Column{
-                    id: listMotColumn
-                    anchors.fill: parent
-                }
-
-
-            }
-        }
-
-
     }
+
+
 
     Connections{
         target: backend

@@ -111,7 +111,6 @@ Window {
         if(isActiveTopBar === false){
             if(okToClose === false){
                 close.accepted = false
-                console.log("oui")
                 backend.closeAsk()
             }
         } // else do nothing => close app
@@ -278,6 +277,7 @@ Window {
 
             Rectangle {
                 id: topDescriptionRectangle1
+
                 height: 15
                 color: medium_color
                 anchors.left: parent.left
@@ -290,14 +290,14 @@ Window {
             }
             Rectangle {
                 id: topDescriptionRectangle2
+
                 anchors.fill: parent
                 color: medium_color
                 radius: 5
-
             }
-
             CustomTopDescriptionBtn {
                 id: settingsBtn
+
                 x: 243
                 anchors.right: parent.right
                 anchors.top: parent.top
@@ -309,14 +309,12 @@ Window {
                 btnColorClicked: accent_color
 
                 onClicked: animationSettingsPannel.running = true
-
-
             }
-
         }
 
         Rectangle {
             id: settingsLeftPanel
+
             x: 627
             width: 0
             color: medium_color
@@ -425,7 +423,7 @@ Window {
             id: stackView
             anchors.left: parent.left
             anchors.right: settingsLeftPanel.left
-            anchors.top: topDescription.bottom
+            anchors.top: topDescription.top
             anchors.bottom: bottomBar.top
             anchors.bottomMargin: 0
             anchors.rightMargin: 0
@@ -437,21 +435,21 @@ Window {
 
             
             replaceEnter: Transition {
-                    XAnimator {
-                        from: (stackView.mirrored ? -1 : 1) * stackView.width
-                        to: 0
-                        duration: 850
-                        easing.type: Easing.InOutQuint
-                    }
+                XAnimator {
+                    from: (stackView.mirrored ? -1 : 1) * stackView.width
+                    to: 0
+                    duration: 850
+                    easing.type: Easing.InOutQuint
+                }
             }
 
             replaceExit: Transition {
-                    XAnimator {
-                        from: 0
-                        to: (stackView.mirrored ? -1 : 1) * -stackView.width
-                        duration: 850
-                        easing.type: Easing.InOutQuint
-                    }
+                XAnimator {
+                    from: 0
+                    to: (stackView.mirrored ? -1 : 1) * -stackView.width
+                    duration: 850
+                    easing.type: Easing.InOutQuint
+                }
             }
         }
 
@@ -706,8 +704,4 @@ Window {
     }
 }
 
-/*##^##
-Designer {
-    D{i:0;height:500;width:1000}
-}
-##^##*/
+

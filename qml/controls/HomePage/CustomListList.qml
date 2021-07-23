@@ -48,6 +48,7 @@ Button {
         color: textColor
 
         width: (parent.width / 5) * 4
+        font.pointSize: 9
         wrapMode: Label.WrapAnywhere
 
 

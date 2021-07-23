@@ -6,49 +6,49 @@
         [
             "Pas de donnée",
             "jamais tester",
-            "",
+            "donc là il y a un context",
             -1
         ],
         [
             "inconnu",
             "niveau très faible",
-            "",
+            "donc là il y a un context",
             0
         ],
         [
             "débutant",
             "niveau faible",
-            "",
+            "donc là il y a un context",
             1
         ],
         [
             "intermédiaire",
             "niveau moyen (deux niveau)",
-            "",
+            "donc là il y a un context",
             2
         ],
         [
             "intermédiaire",
             "niveau moyen ",
-            "",
+            "donc là il y a un context",
             3
         ],
         [
             "avancé",
             "bon niveau",
-            "",
+            "donc là il y a un context",
             4
         ],
         [
             "maitrisé",
             "très bon niveau",
-            "",
+            "donc là il y a un context",
             5
         ],
         [
             "parfait",
             "très bon niveau de façon régulière",
-            "",
+            "donc là il y a un context",
             6
         ]
     ],

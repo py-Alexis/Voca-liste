@@ -33,6 +33,7 @@ Item{
     Rectangle{
         id: rectangle
         anchors.fill: parent
+        anchors.topMargin: 25
 
         color: light_color
 
@@ -452,6 +453,7 @@ Item{
                     backend.getBackup()
                     stackView.replace(Qt.resolvedUrl("../pages/HomePage.qml"))
                     currentList = ""
+                    currentMode = ""
                     backend.getListList()
                 }
 
@@ -486,7 +488,6 @@ Item{
         }
 
         function onCheckedList(message){
-            console.log(message)
             if(message === "ok"){
                 stackView.replace(Qt.resolvedUrl("../pages/HomePage.qml"))
                 currentList = ""

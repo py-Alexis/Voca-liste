@@ -11,21 +11,41 @@ import "../pages"
 Item {
     id: revisionSelector
 
+    CustomTopDescriptionBtn {
+        id: homeBtn
+
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.topMargin: -1
+        anchors.leftMargin: 39
+
+        btnLogoColor: medium_text_color
+        btnColorMouseOver: light_text_color
+        btnColorClicked: accent_color
+        btnIconSource: "../../images/home_icon.svg"
+
+        onClicked: {
+            stackView.replace(Qt.resolvedUrl("../pages/HomePage.qml"))
+            currentList = ""
+            backend.getListList()
+        }
+    }
+
     Rectangle{
         id: bg
         color: light_color
         anchors.fill: parent
+        anchors.topMargin: 25
 
         Label {
             id: listName
 
             color: light_text_color
 
-
             text: currentList
             anchors.top: parent.top
-            font.pointSize: 20
-            anchors.topMargin: 30
+            font.pointSize: 17
+            anchors.topMargin: 15
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
@@ -96,6 +116,7 @@ Item {
                     anchors.left: parent.left
                     anchors.leftMargin: 0
                     color: light_text_color
+                    font.pointSize: 9
                 }
 
                 TabBar{
@@ -158,6 +179,7 @@ Item {
                     anchors.left: parent.left
                     anchors.leftMargin: 0
                     color: light_text_color
+                    font.pointSize: 9
                 }
 
                 TabBar{
@@ -212,6 +234,7 @@ Item {
                         }
                     }
                     TabButton{
+                        id: aleatoire
                         text: "Aléatoire"
                         width: implicitWidth
 
@@ -295,6 +318,33 @@ Item {
                 id: startRevisionBtn
 
                 text: "Lancer la revision"
+
+
+                btnColor: accent_color
+                btnTextColor: light_text_color
+
+                onClicked: {
+                    var mode = "" // write or QCM
+                    var direction = "" // default (definition => mot); opposite (mot => definition); random
+
+                    if(ecrireBtn.checked){
+                        mode = "write"
+
+                    }else{
+                        mode = "QCM"
+                    }
+
+                    if(aleatoire.checked){
+                        direction = "random"
+                    }else if(defaultDirection.checked){
+                        direction = "default"
+                    }else{
+                        direction = "opposite"
+                    }
+
+                    stackView.replace(Qt.resolvedUrl("../pages/RevisionPage.qml"))
+                    backend.startRevision(currentList, currentMode, mode, direction)
+                }
             }
         }
     }

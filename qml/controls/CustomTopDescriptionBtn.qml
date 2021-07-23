@@ -59,6 +59,8 @@ Button {
             mipmap: true
             anchors.horizontalCenter: parent.horizontalCenter
             visible: false
+            sourceSize.width: 16
+            sourceSize.height: 16
             height: 16
             width: 16
 
@@ -67,6 +69,7 @@ Button {
             antialiasing: true
 
         }
+
         ColorOverlay {
             anchors.fill: iconBtn
             source: iconBtn

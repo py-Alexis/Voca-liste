@@ -1,6 +1,8 @@
 # This Python file uses the following encoding: utf-8
 import sys
 import os, shutil, glob
+import random
+import time, datetime
 
 from PySide2.QtGui import QGuiApplication, QIcon
 from PySide2.QtQml import QQmlApplicationEngine
@@ -8,8 +10,14 @@ from PySide2.QtCore import QObject, Slot, Signal
 
 import json
 
+# General variable
 settings_path = "Settings\Settings.json"
 
+# Global variable for Revision Page
+word_list = []
+word_list_shuffle = []
+history = []
+time_start = 0
 
 class MainWindow(QObject):
     def __init__(self):
@@ -47,6 +55,21 @@ class MainWindow(QObject):
         else:
             return False
 
+    def get_list_percentage(self, liste_name=False):
+
+        if liste_name == False:
+            content_liste = word_list
+        else:
+            content_liste = self.read(liste_name)["liste"]
+
+        nb_word = len(content_liste)
+        lv_sum = 0
+
+        for element in content_liste:
+            if element[3] != -1:
+                lv_sum += element[3]
+
+        return round((lv_sum / (nb_word * 6)) * 100, 1)
 
     sendWordList = Signal("QVariant", bool)
     @Slot(str)
@@ -59,7 +82,6 @@ class MainWindow(QObject):
         content_list = self.read(listName)
 
         self.sendWordList.emit(content_list["liste"], newLine)
-
     # --------END GENERAL FUNCTION---------
 
     sendCloseAsk = Signal()
@@ -157,13 +179,12 @@ class MainWindow(QObject):
         # We check for each files if it already exist, if not we copy it in the listes folder
 
         for url in listurls:
-            path = str(url)[29:-2] # Urls given by the dialog are a bit weird so we have to remove some chars
+            path = str(url)[29:-2]  # Urls given by the dialog are a bit weird so we have to remove some chars
 
             if os.path.isfile("listes/" + os.path.basename(path)):
                 pass  # ________________________________________________________________________________________________ajouter un popup à la fin qui dit que le fichier n'a pas pu être copier car il existe déjà
             else:
                 shutil.copy2(path, "listes")
-
 
     sendCheckedName = Signal(str)
     @Slot(str)
@@ -189,7 +210,7 @@ class MainWindow(QObject):
             self.sendCheckedName.emit(name)
             return True
 
-        except: # Not good the do a such large except but it shouldn't be necessary anyway so I just keep it like that
+        except:  # Not good to do a such large except but it shouldn't be necessary anyway so I just keep it like that
             self.sendCheckedName.emit("erreur")
             return False
 
@@ -264,7 +285,6 @@ class MainWindow(QObject):
     def newLineOnEnter(self):
         self.sendNewLineOnEnter.emit()
 
-
     getCurrentRow = Signal(str)
     @Slot(str, int)
     def suppLine(self, list, selectedRow):
@@ -324,7 +344,7 @@ class MainWindow(QObject):
         os.rename("listes/" + liste + ".json", "listes/" + newlistename + ".json")
 
         self.checkedList.emit("ok")  # the file is complete (so it can go back to home page)
-        self.getListList() # we create the elements of the homepage
+        self.getListList()  # we create the elements of the homepage
 
     @Slot(str, int)
     def resetLv(self, liste, selectedRow):
@@ -382,15 +402,126 @@ class MainWindow(QObject):
         content_liste = self.read(liste)
 
         nb_word = len(content_liste["liste"])
-        lv_sum = 0
 
-        for element in content_liste["liste"]:
-            if element[3] != -1:
-                lv_sum += element[3]
-
-        self.sendListInfo.emit(nb_word, (lv_sum/(nb_word * 6)) * 100)
+        self.sendListInfo.emit(nb_word, self.get_list_percentage(liste))
 
     # -------  Fin Revision Selector ------
+
+    # -------------------------------------
+    # -----------  Revision Page  ---------
+    # -------------------------------------
+
+    initializeRevision = Signal(list) # [str, str, int] but for some reason it crash the app without them in list
+    @Slot(str, str, str, str)
+    def startRevision(self, liste, liste_mode, revision_mode, revision_direction):
+        # Initialize revision Page
+        #
+        # revision_mode: "write" or "QCM"
+        # revision_direction: "default" (definition => mot); "opposite" (mot => definition); "random"
+
+        global word_list
+        global word_list_shuffle
+        global history
+        global time_start
+        time_start = datetime.datetime.now()
+        word_list = word_list_shuffle = self.read(liste)["liste"]
+        random.shuffle(word_list_shuffle)
+        history = [time.time(), time.ctime(), -1, []]
+
+        self.initializeRevision.emit([revision_mode, revision_direction, len(word_list)])
+
+        self.next_word(revision_mode, revision_direction, 1)
+
+    new_word = Signal("QVariant")
+    @Slot(str, str, int)
+    def next_word(self, revision_mode, revision_direction, index):
+        # send the next word in the form of a dictionary:
+        # "displayWord" : "word", "toFindWord": "coresponding word", "context" : "if some context",
+        # "hint" : ["word1", "word2", "word3_if_in_qcm_mode"]
+        index -= 1
+
+        next_word_info = {"displayWord" : "", "toFindWord": "", "context" : False, "hint" : []}
+
+        if revision_direction == "random":
+            revision_direction = random.choice(["default", "opposite"])
+
+        if revision_direction == "default":
+            next_word_info["displayWord"] = word_list_shuffle[index][1]
+            next_word_info["toFindWord"] = word_list_shuffle[index][0]
+        else:
+            next_word_info["displayWord"] = word_list_shuffle[index][0]
+            next_word_info["toFindWord"] = word_list_shuffle[index][1]
+
+        if word_list_shuffle[index][2] != "":
+            next_word_info["context"] = word_list_shuffle[index][2]
+
+        if revision_mode == "QCM":
+
+            while len(next_word_info["hint"]) < 3:
+                new_hint = random.choice(word_list_shuffle)
+
+                # The hint can't be the word we are looking for
+                if new_hint != word_list_shuffle[index]:
+
+                    # check if the hint is already in the list
+                    if revision_direction == "default":
+                        if new_hint[0] not in next_word_info["hint"]:
+                            next_word_info["hint"].append(new_hint[0])
+
+                    else:
+                        if new_hint[1] not in next_word_info["hint"]:
+                            next_word_info["hint"].append(new_hint[1])
+
+        next_word_info["hint"].append(next_word_info["toFindWord"])
+        random.shuffle(next_word_info["hint"])
+        self.new_word.emit(next_word_info)
+
+    send_call_next_word = Signal()
+    @Slot()
+    def call_next_word(self):
+        self.send_call_next_word.emit()
+
+    @Slot(str, str, int)
+    def add_history(self, word_clicked, to_find, index):
+        real_index  = word_list.index(word_list_shuffle[index - 1])
+
+        if word_clicked == to_find:
+            if -1 <= word_list[real_index][3] < 3:
+                word_list[real_index][3] += 1
+        else:
+
+            history[3].append(word_list_shuffle[index - 1])
+            if 1 <= word_list[real_index][3]:
+                word_list[real_index][3] -= 1
+
+    intializeRevision = Signal(list)
+    @Slot(str, str, str)
+    def finish(self, liste, revision_mode, revision_direction):
+        # activate when user finish the revision
+
+        # calculate time spend on the list
+        time_spend = datetime.datetime.now().replace(microsecond=0) - time_start.replace(microsecond=0)
+
+        # update the list (each word level and history)
+        content_liste = self.read(liste)
+        content_liste["liste"] = word_list
+        history[2] = self.get_list_percentage()
+        history.append(time_spend.total_seconds())
+        content_liste["historique"].append(history)
+        self.write(content_liste, liste)
+
+        # initialize resultPage
+
+        result = f"{len(word_list) - len(history[3])} / {len(word_list)}"
+        mistake = ""
+        if len(history[3]) != 0:
+            for element in history[3]:
+                mistake += element[0]
+                mistake += " "
+
+        self.intializeRevision.emit([revision_mode, revision_direction, result, f"{history[2]}%", str(time_spend), mistake])
+
+    # ---------  Fin Revision Page --------
 
 
 if __name__ == "__main__":
@@ -399,11 +530,10 @@ if __name__ == "__main__":
 
     app.setWindowIcon(QIcon("images/icon_app_top.svg"))
 
-    # don't realy know why but without this it raise an error so I inculde it
+    # don't realy know why but without this it raise an error so I include it
     app.setOrganizationName("Alexis MORICE")
     app.setOrganizationDomain("j'ai_pas_de_site.com")
-    app.setApplicationName("voca-list")
-
+    app.setApplicationName("voca-liste")
 
     main = MainWindow()
     engine.rootContext().setContextProperty("backend", main)
