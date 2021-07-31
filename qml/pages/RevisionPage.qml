@@ -51,7 +51,6 @@ Item {
                 color: light_text_color
                 font.pointSize: 17
 
-                text: currentList
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             Row{
@@ -63,7 +62,6 @@ Item {
                 Label{
                     id: listMode
 
-                    text: currentMode
                     color: medium_text_color
                     font.pointSize: 11
                 }
@@ -179,6 +177,9 @@ Item {
         target: backend
 
         function onInitializeRevision(info){ // For some reason when the signal is define as Signal(str, str, int) it crash sometime so I put everything in a list
+            listName.text = currentList
+            listMode.text = currentMode
+
             revisionModeLabel.text = info[0]
             revisionMode = info[0]
             revisionDirectionLabel.text = info[1] // To Do : change text to mot => definition...

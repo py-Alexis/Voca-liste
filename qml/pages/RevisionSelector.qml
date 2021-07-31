@@ -42,7 +42,6 @@ Item {
 
             color: light_text_color
 
-            text: currentList
             anchors.top: parent.top
             font.pointSize: 17
             anchors.topMargin: 15
@@ -62,7 +61,6 @@ Item {
 
                 color: medium_text_color
 
-                text: `mode: ${currentMode}`
                 font.pointSize: 11
             }
 
@@ -358,6 +356,9 @@ Item {
         }
 
         function onSendListInfo(nbWord, lv){
+            listName.text = currentList
+            listMode.text = `mode: ${currentMode}`
+
             listNbWord.text = `${nbWord} mots`
             listLv.text = `${lv} %`
         }

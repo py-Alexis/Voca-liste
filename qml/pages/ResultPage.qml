@@ -25,7 +25,6 @@ Item {
             color: light_text_color
             font.pointSize: 17
 
-            text: currentList
             anchors.horizontalCenter: parent.horizontalCenter
         }
         Row{
@@ -37,7 +36,6 @@ Item {
             Label{
                 id: listMode
 
-                text: currentMode
                 color: medium_text_color
                 font.pointSize: 11
             }
@@ -268,6 +266,8 @@ Item {
 
         function onIntializeRevision(info){
             //[revision_mode, revision_direction, result, percentage, time_spend, mistake]
+            listName.text = currentList
+            listMode.text = currentMode
 
             revisionModeLabel.text = info[0]
             revisionDirectionLabel.text = info[1]

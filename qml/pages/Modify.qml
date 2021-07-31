@@ -92,7 +92,9 @@ Item{
 
                 TextInput {
                     id: currentListLabel
-                    text: currentList
+
+                    text: ""
+
                     anchors.verticalCenter: parent.verticalCenter
                     font.pointSize: 15
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -482,6 +484,9 @@ Item{
         target: backend
 
         function onSendCreateTable(categorie){
+            if (currentListLabel.text === ""){
+                currentListLabel.text = currentList
+            }
             internal.destroyTable()
             categorieSelector.text = categorie
             backend.getWords(currentList)
