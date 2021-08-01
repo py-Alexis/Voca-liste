@@ -11,6 +11,8 @@ import "../pages"
 Item {
     id: revisionSelector
 
+    property int nbWord: -1
+
     CustomTopDescriptionBtn {
         id: homeBtn
 
@@ -128,6 +130,9 @@ Item {
                         text: "QCM"
                         width: implicitWidth
 
+                        checkable: if(nbWord < 4){false}else{true}
+                        opacity: if(nbWord < 4){0.5}else{1}
+
                         contentItem: Text{
                             color: parent.checked ? light_text_color: medium_text_color
                             text: parent.text
@@ -141,8 +146,12 @@ Item {
                         }
 
                         onClicked: {
-
+                            if(nbWord < 4){
+                                popUp.popUpText = "la liste doit comporter au moins 4 mots pour utiliser ce mode"
+                                showPopUp.running = true
+                            }
                         }
+
                     }TabButton{
                         id: ecrireBtn
                         text: "Ecrire"
@@ -213,7 +222,8 @@ Item {
                         text: if(currentMode === "langue"){"Expression => Traduction"}else{"Mot => Définition"}
                         width: implicitWidth
 
-                        visible: if(currentMode === "dictionnaire" && ecrireBtn.checked){false}else{true}
+                        checkable: if(currentMode === "dictionnaire" && ecrireBtn.checked){false}else{true}
+                        opacity: if(currentMode === "dictionnaire" && ecrireBtn.checked){0.5}else{1}
 
                         contentItem: Text{
                             color: parent.checked ? light_text_color: medium_text_color
@@ -228,7 +238,10 @@ Item {
                         }
 
                         onClicked: {
-
+                            if(currentMode === "dictionnaire" && ecrireBtn.checked){
+                                popUp.popUpText = "ce mode n'est pas disponible pour les listes dictionnaires"
+                                showPopUp.running = true
+                            }
                         }
                     }
                     TabButton{
@@ -236,7 +249,8 @@ Item {
                         text: "Aléatoire"
                         width: implicitWidth
 
-                        visible: if(currentMode === "dictionnaire" && ecrireBtn.checked){false}else{true}
+                        checkable: if(currentMode === "dictionnaire" && ecrireBtn.checked){false}else{true}
+                        opacity: if(currentMode === "dictionnaire" && ecrireBtn.checked){0.5}else{1}
 
                         contentItem: Text{
                             color: parent.checked ? light_text_color: medium_text_color
@@ -251,7 +265,10 @@ Item {
                         }
 
                         onClicked: {
-
+                            if(currentMode === "dictionnaire" && ecrireBtn.checked){
+                                popUp.popUpText = "ce mode n'est pas disponible pour les listes dictionnaires"
+                                showPopUp.running = true
+                            }
                         }
                     }
                 }
@@ -345,6 +362,21 @@ Item {
                 }
             }
         }
+
+        PopUp{
+            id: popUp
+
+            opacity: 0
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 100
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            PropertyAnimation { id: showPopUp; target: popUp; property: "opacity"; to: 1; duration: 750; easing.type: Easing.InOutQuint; onFinished: waitPopUp.running = true}
+            // not ideal but it's the only way I find to let the popUp a bit before it vanish
+            PropertyAnimation { id: waitPopUp; target: popUp; property: "opacity"; to: 1; duration: 2000; easing.type: Easing.InOutQuint; onFinished: hidePopUp.running = true}
+            PropertyAnimation { id: hidePopUp; target: popUp; property: "opacity"; to: 0; duration: 500; easing.type: Easing.InOutQuint}
+
+        }
     }
 
 
@@ -355,12 +387,17 @@ Item {
             backend.close()
         }
 
-        function onSendListInfo(nbWord, lv){
+        function onSendListInfo(nbWord_, lv){
             listName.text = currentList
             listMode.text = `mode: ${currentMode}`
 
-            listNbWord.text = `${nbWord} mots`
+            nbWord = nbWord_
+            listNbWord.text = `${nbWord_} mots`
             listLv.text = `${lv} %`
+
+            if(nbWord < 4){
+                ecrireBtn.checked = true
+            }
         }
     }
 }
