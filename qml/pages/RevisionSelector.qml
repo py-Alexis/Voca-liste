@@ -371,6 +371,9 @@ Item {
             anchors.bottomMargin: 100
             anchors.horizontalCenter: parent.horizontalCenter
 
+            rectangleColor: darker_color
+            textColor: light_text_color
+
             PropertyAnimation { id: showPopUp; target: popUp; property: "opacity"; to: 1; duration: 750; easing.type: Easing.InOutQuint; onFinished: waitPopUp.running = true}
             // not ideal but it's the only way I find to let the popUp a bit before it vanish
             PropertyAnimation { id: waitPopUp; target: popUp; property: "opacity"; to: 1; duration: 2000; easing.type: Easing.InOutQuint; onFinished: hidePopUp.running = true}

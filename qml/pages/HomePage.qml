@@ -16,6 +16,9 @@ Item {
     property string destroy_: ""
     property int reloadList: 0
 
+    // use to not let revise an empty list
+    property int currentListNbWord: -1
+
 
     QtObject{
         id: internal
@@ -82,7 +85,7 @@ Item {
 
             var pair = true
             for (const word in wordList) {
-                var obejct = Qt.createQmlObject(`import QtQuick 2.0;import QtQuick.Controls 2.15;import "../controls/HomePage";import "../";CustomWordDisplay {id: test ;parentWidth: listMotScrollView.width;destroy: destroy_; isPair : ${pair}; mot:"${wordList[word][0]}"; definition:"${wordList[word][1]}" ;context: "${wordList[word][2]}" ; niveau: ${wordList[word][3]} ; textColor: light_text_color ; btnColorIsPair: light_color; btnColorNotPair: medium_color}`,listMotColumn,"home");
+                var obejct = Qt.createQmlObject(`import QtQuick 2.0;import QtQuick.Controls 2.15;import "../controls/HomePage";import "../";CustomWordDisplay {id: test ;parentWidth: listMotScrollView.width;destroy: destroy_; isPair : ${pair}; mot:"${wordList[word][0]}"; definition:"${wordList[word][1]}" ;context: "${wordList[word][2]}" ; niveau: ${wordList[word][3]} ; textColor: light_text_color ; btnColorIsPair: light_color; btnColorNotPair: medium_color; accentColor: accent_color}`,listMotColumn,"home");
                 pair = !pair
             }
         }
@@ -270,14 +273,22 @@ Item {
                     anchors.leftMargin: 0
                     textBtn: "Réviser |"
 
-                    btnTextColor: light_text_color
+                    btnTextColor: if(currentListNbWord === 0){medium_text_color}else{light_text_color}
                     btnTextColorDown: medium_text_color
 
-                    onClicked: {stackView.replace(Qt.resolvedUrl("../pages/RevisionSelector.qml")); backend.getListInfo(currentList)}
+
+                    onClicked: {
+                        if (currentListNbWord !== 0){
+                            stackView.replace(Qt.resolvedUrl("../pages/RevisionSelector.qml"))
+                            backend.getListInfo(currentList)
+                        }else{
+                            popUp.popUpText = "cette liste est vide"
+                            showPopUp.running = true
+                        }
+                    }
                 }
 
                 Rectangle{
-                    id: rectangle
                     color: light_color
                     height: parent.height
                     radius: parent.radius
@@ -463,6 +474,24 @@ Item {
                 }
             }
         }
+
+        PopUp{
+            id: popUp
+
+            opacity: 0
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 100
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            rectangleColor: darker_color
+            textColor: light_text_color
+
+            PropertyAnimation { id: showPopUp; target: popUp; property: "opacity"; to: 1; duration: 750; easing.type: Easing.InOutQuint; onFinished: waitPopUp.running = true}
+            // not ideal but it's the only way I find to let the popUp a bit before it vanish
+            PropertyAnimation { id: waitPopUp; target: popUp; property: "opacity"; to: 1; duration: 2000; easing.type: Easing.InOutQuint; onFinished: hidePopUp.running = true}
+            PropertyAnimation { id: hidePopUp; target: popUp; property: "opacity"; to: 0; duration: 500; easing.type: Easing.InOutQuint}
+
+        }
     }
 
 
@@ -478,6 +507,7 @@ Item {
             if (modifierClicked === false){
                 listIsSelected = true
                 internal.createWordDisplay(wordlist)
+                currentListNbWord = wordlist.length
             }
         }
 
