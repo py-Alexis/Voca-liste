@@ -12,6 +12,7 @@ Item{
 
 
     property string toFind: ""
+    property int buttonClicked: -1
 
     property bool clickable: true
 
@@ -20,18 +21,11 @@ Item{
 
         function colorGoodAnswer(wordClicked){
             clickable = false
-            if(qcmBtn1.text === toFind){
-                qcmBtn1.btnColor = accent_color
-            }else if(qcmBtn2.text === toFind){
-                qcmBtn2.btnColor = accent_color
-            }else if(qcmBtn3.text === toFind){
-                qcmBtn3.btnColor = accent_color
-            }else if(qcmBtn4.text === toFind){
-                qcmBtn4.btnColor = accent_color
-            }
+
             if(displayContextLabel.text !== "false"){
                 animationContext.running = true
             }
+
             backend.add_history(wordClicked, toFind, index)
         }
     }
@@ -112,18 +106,20 @@ Item{
          QcmBtn{
              id: qcmBtn1
 
+             property int answer1: 0 // 0 don't click, 1 false, 2 true
+
              anchors.left: parent.left
              anchors.right: parent.right
              anchors.rightMargin: 0
              anchors.leftMargin: 0
              enabled: clickable
-             btnColor: medium_color
+             btnColor: if(clickable){medium_color}else{if(text === toFind){accent_color}else{if(buttonClicked === 1){darker_color}else{medium_color}}}
              btnTextColor: light_text_color
 
              text: ""
 
              onClicked: {
-                 btnColor = darker_color // turn the button dark
+                 buttonClicked = 1
                  internal.colorGoodAnswer(qcmBtn1.text) // turn the good answer green
              }
          }
@@ -136,14 +132,14 @@ Item{
              anchors.rightMargin: 0
              anchors.leftMargin: 0
              enabled: clickable
-             btnColor: medium_color
+             btnColor: if(clickable){medium_color}else{if(text == toFind){accent_color}else{if(buttonClicked === 2){darker_color}else{medium_color}}}
              btnTextColor: light_text_color
 
 
              text: ""
 
              onClicked: {
-                 btnColor = darker_color // turn the button dark
+                 buttonClicked = 2
                  internal.colorGoodAnswer(qcmBtn2.text) // turn the good answer green
              }
          }
@@ -155,13 +151,13 @@ Item{
              anchors.rightMargin: 0
              anchors.leftMargin: 0
              enabled: clickable
-             btnColor: medium_color
+             btnColor: if(clickable){medium_color}else{if(text == toFind){accent_color}else{if(buttonClicked === 3){darker_color}else{medium_color}}}
              btnTextColor: light_text_color
 
              text: ""
 
              onClicked: {
-                 btnColor = darker_color // turn the button dark
+                 buttonClicked = 3
                  internal.colorGoodAnswer(qcmBtn3.text) // turn the good answer green
              }
          }
@@ -173,13 +169,13 @@ Item{
              anchors.rightMargin: 0
              anchors.leftMargin: 0
              enabled: clickable
-             btnColor: medium_color
+             btnColor: if(clickable){medium_color}else{if(text == toFind){accent_color}else{if(buttonClicked === 4){darker_color}else{medium_color}}}
              btnTextColor: light_text_color
 
              text: ""
 
              onClicked: {
-                 btnColor = darker_color // turn the button dark
+                 buttonClicked = 4
                  internal.colorGoodAnswer(qcmBtn4.text) // turn the good answer green
              }
          }
@@ -231,7 +227,9 @@ Item{
                  displayContextLabel.text = info["context"]
              }
 
-             toFind = info["toFindWord"]
+             if(toFind === ""){
+                 toFind = info["toFindWord"]
+             }
 
              if(nextBtn.text === ""){
                  if(index !=  nbWord){nextBtn.text = "Suivant"}else{nextBtn.text = "Terminer"}
