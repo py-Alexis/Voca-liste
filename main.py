@@ -424,7 +424,8 @@ class MainWindow(QObject):
         global history
         global time_start
         time_start = datetime.datetime.now()
-        word_list = word_list_shuffle = self.read(liste)["liste"]
+        word_list = self.read(liste)["liste"]
+        word_list_shuffle = self.read(liste)["liste"]
         random.shuffle(word_list_shuffle)
         history = [time.time(), time.ctime(), -1, []]
 
