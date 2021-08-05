@@ -395,7 +395,7 @@ class MainWindow(QObject):
     # ---------  Revision Selector  -------
     # -------------------------------------
 
-    sendListInfo = Signal(int, int)
+    sendListInfo = Signal("QVariant") # if fact it int, int, "QVariant" but it crash sometimes so again all in a list
     @Slot(str)
     def getListInfo(self, liste):
         # Send list info: number of word in the list and percentage
@@ -403,7 +403,33 @@ class MainWindow(QObject):
 
         nb_word = len(content_liste["liste"])
 
-        self.sendListInfo.emit(nb_word, self.get_list_percentage(liste))
+        history = []
+
+        for index, element in enumerate(content_liste["historique"]):
+            # date format
+            history.append([datetime.datetime.fromtimestamp(element[0]).strftime('%d %b %G\n%H : %M')])
+
+            if index == 0:
+                history[0].append(f"0% -> {element[2]}%")
+            else:
+                history[index].append(f"{content_liste['historique'][index - 1][2]}% -> {element[2]}%")
+
+            history[index].append(f"{format(element[4] // 60, '02d')}:{element[4] % 60}")
+
+            history[index].append(len(element[3]))
+
+            mistakes = ""
+            for mistake in element[3]:
+                mistakes += mistake[0]
+                mistakes += " "
+
+            history[index].append(mistakes)
+
+        from pprint import pprint
+        pprint(history)
+
+
+        self.sendListInfo.emit([nb_word, self.get_list_percentage(liste), history])
 
     # -------  Fin Revision Selector ------
 
@@ -484,7 +510,7 @@ class MainWindow(QObject):
 
     @Slot(str, str, int)
     def add_history(self, word_clicked, to_find, index):
-        real_index  = word_list.index(word_list_shuffle[index - 1])
+        real_index = word_list.index(word_list_shuffle[index - 1])
 
         if word_clicked == to_find:
             if -1 <= word_list[real_index][3] < 3:
@@ -507,7 +533,7 @@ class MainWindow(QObject):
         content_liste = self.read(liste)
         content_liste["liste"] = word_list
         history[2] = self.get_list_percentage()
-        history.append(time_spend.total_seconds())
+        history.append(int(time_spend.total_seconds()))
         content_liste["historique"].append(history)
         self.write(content_liste, liste)
 

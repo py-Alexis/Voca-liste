@@ -5,6 +5,7 @@ import QtGraphicalEffects 1.15
 import QtQuick.Dialogs 1.3
 import "../controls"
 import "../controls/Modify"
+import "../controls/RevisionSelector"
 import "../"
 import "../pages"
 
@@ -12,6 +13,18 @@ Item {
     id: revisionSelector
 
     property int nbWord: -1
+
+    QtObject{
+        id: internal
+
+        function createHistory(history){
+            var paire = true
+            for (const index in history){
+                    var newObject = Qt.createQmlObject(`import QtQuick 2.0; import "../controls/RevisionSelector"; HistoryLine{pair: ${paire}; date: "${history[index][0]}"; lv: "${history[index][1]}"; time: "${history[index][2]}"; nbMistakes: ${history[index][3]}; mistakes: "${history[index][4]}"}`,historyColumn,"revisionSelector")
+                    paire = !paire
+            }
+        }
+    }
 
     CustomTopDescriptionBtn {
         id: homeBtn
@@ -277,7 +290,7 @@ Item {
         }
 
         Rectangle{
-            id: history
+            id: historyContainer
 
             color: medium_color
             anchors.left: parent.left
@@ -292,6 +305,8 @@ Item {
             radius: 5
 
             Label {
+                id: noData
+
                 anchors.verticalCenter: parent.verticalCenter
                 font.pointSize: 25
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -303,6 +318,131 @@ Item {
                 opacity: 0.3
             }
 
+            Rectangle{
+                id: historyHeader
+
+                height: 20
+                color: "#00000000"
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.topMargin: 10
+                anchors.rightMargin: 20
+                anchors.leftMargin: 20
+
+
+                Label{
+                    id: dayLabelHistory
+                    text: "Date"
+                    color: medium_text_color
+
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    verticalAlignment: Text.AlignVCenter
+                    leftPadding: 5
+                    font.pointSize: 10
+                    anchors.leftMargin: 0
+                    anchors.topMargin: 0
+                    anchors.bottomMargin: 0
+
+                    width: parent.width / 6
+
+
+                }
+
+                Label{
+                    id: lvLabelHistory
+                    text: "Niveau"
+                    color: medium_text_color
+
+                    anchors.left: dayLabelHistory.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    verticalAlignment: Text.AlignVCenter
+                    leftPadding: 5
+                    font.pointSize: 10
+                    anchors.leftMargin: 0
+                    anchors.topMargin: 0
+                    anchors.bottomMargin: 0
+
+                    width: parent.width / 6
+                }
+
+                Label{
+                    id: timeLabelHistory
+                    text: "Durée"
+                    color: medium_text_color
+
+                    anchors.left: lvLabelHistory.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    verticalAlignment: Text.AlignVCenter
+                    leftPadding: 5
+                    font.pointSize: 10
+                    anchors.leftMargin: 0
+                    anchors.topMargin: 0
+                    anchors.bottomMargin: 0
+
+                    width: parent.width / 6
+                }
+
+                Label{
+                    id: nbMistakeLabelHistory
+                    text: "Nombre d'erreur"
+                    color: medium_text_color
+
+                    anchors.left: timeLabelHistory.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    verticalAlignment: Text.AlignVCenter
+                    leftPadding: 5
+                    font.pointSize: 10
+                    anchors.leftMargin: 0
+                    anchors.topMargin: 0
+                    anchors.bottomMargin: 0
+
+                    width: parent.width / 6
+                }
+
+                Label{
+                    id: mistakeLabelHistory
+                    text: "Erreur"
+                    color: medium_text_color
+
+                    anchors.left: nbMistakeLabelHistory.right
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    verticalAlignment: Text.AlignVCenter
+                    leftPadding: 5
+                    font.pointSize: 10
+                    anchors.rightMargin: 0
+                    anchors.leftMargin: 0
+                    anchors.topMargin: 0
+                    anchors.bottomMargin: 0
+                }
+
+            }
+
+            ScrollView {
+                id: historyScrollView
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: historyHeader.bottom
+                anchors.bottom: parent.bottom
+                clip: true
+
+                anchors.topMargin: 10
+                anchors.rightMargin: 20
+                anchors.leftMargin: 20
+
+                Column{
+                    id: historyColumn
+                    anchors.fill: parent
+
+                }
+            }
         }
 
         Row{
@@ -390,16 +530,28 @@ Item {
             backend.close()
         }
 
-        function onSendListInfo(nbWord_, lv){
+        function onSendListInfo(data){ // data = [nbWord_, lv, history]
+
             listName.text = currentList
             listMode.text = `mode: ${currentMode}`
 
-            nbWord = nbWord_
-            listNbWord.text = `${nbWord_} mots`
-            listLv.text = `${lv} %`
+            nbWord = data[1]
+            listNbWord.text = `${data[0]} mots`
+            listLv.text = `${data[1]} %`
 
             if(nbWord < 4){
                 ecrireBtn.checked = true
+            }
+            var history = data[2]
+            if(history.length === 0){
+                noData.visible = true
+                historyHeader.visible = false
+                historyContainer.color = medium_color
+            }else{
+                noData.visible = false
+                historyHeader.visible = true
+                historyContainer.color = "transparent"
+                internal.createHistory(data[2])
             }
         }
     }
