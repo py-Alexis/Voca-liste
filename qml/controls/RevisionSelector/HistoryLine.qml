@@ -5,6 +5,8 @@ import QtGraphicalEffects 1.15
 Rectangle {
     id: historyLine
 
+    property int parentWidth: 200
+
     property bool pair: false
     property color backgroundColorIsPair: "#282C34"
     property color backgroundColorNotPair: "#2C313C"
@@ -15,11 +17,13 @@ Rectangle {
     property string lv: "lv => lv"
     property int nbMistakes: 0
     property string mistakes: "mistkes qmdlkj fqmdslfjk mqdlsjk fmqldsj fmlsqd jfmlqsdj fmlqdsjf mlqdsj fmlqdf jmlqdjf mqlsdfj mqsldfj kmlsfjk lmqjfmqljf mlqsd fmqsldf jqmld jmqldsf mqlsdjf mqldfj mqdflj"
+    property string mode: "QCM"
+    property string direction: "default"
+
 
     anchors.left: parent.left
     anchors.leftMargin: 0
-    anchors.right: parent.right
-    anchors.rightMargin: 0
+    width: parentWidth
 
     color: if(pair){backgroundColorIsPair}else{backgroundColorNotPair}
     height: if(dayLabelHistory.height >= mistakeLabelHistory.height){
@@ -42,7 +46,35 @@ Rectangle {
             leftPadding: 5
             font.pointSize: 10
 
-            width: parent.width / 6
+            width: parent.width / 8
+
+
+        }
+        Label{
+            id: modeLabelHistory
+            text: mode
+            color: textColor
+
+            anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment: Text.AlignVCenter
+            leftPadding: 5
+            font.pointSize: 10
+
+            width: parent.width / 8
+
+
+        }
+        Label{
+            id: directionLabelHistory
+            text: direction
+            color: textColor
+
+            anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment: Text.AlignVCenter
+            leftPadding: 5
+            font.pointSize: 10
+
+            width: parent.width / 8
 
 
         }
@@ -56,7 +88,7 @@ Rectangle {
             leftPadding: 5
             font.pointSize: 10
 
-            width: parent.width / 6
+            width: parent.width / 8
         }
 
         Label{
@@ -69,7 +101,7 @@ Rectangle {
             leftPadding: 5
             font.pointSize: 10
 
-            width: parent.width / 6
+            width: parent.width / 8
         }
 
 
@@ -83,7 +115,7 @@ Rectangle {
             leftPadding: 5
             font.pointSize: 10
 
-            width: parent.width / 6
+            width: parent.width / 8
         }
 
         Label{
@@ -97,7 +129,7 @@ Rectangle {
             leftPadding: 5
             font.pointSize: 10
 
-            width: (parent.width / 6) * 2
+            width: (parent.width / 8) * 2
         }
     }
 }
@@ -106,6 +138,6 @@ Rectangle {
 
 /*##^##
 Designer {
-    D{i:0;height:40;width:700}
+    D{i:0;height:40;width:800}
 }
 ##^##*/

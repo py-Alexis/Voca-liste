@@ -20,7 +20,7 @@ Item {
         function createHistory(history){
             var paire = true
             for (const index in history){
-                    var newObject = Qt.createQmlObject(`import QtQuick 2.0; import "../controls/RevisionSelector"; HistoryLine{anchors.left: parent.left;anchors.leftMargin: 0;anchors.right: parent.right;anchors.rightMargin: 0;pair: ${paire}; date: "${history[index][0]}"; lv: "${history[index][1]}"; time: "${history[index][2]}"; nbMistakes: ${history[index][3]}; mistakes: "${history[index][4]}"}`,historyColumn,"revisionSelector")
+                    var newObject = Qt.createQmlObject(`import QtQuick 2.0; import "../controls/RevisionSelector"; HistoryLine{parentWidth: historyScrollView.width;pair: ${paire}; date: "${history[index][0]}";mode: "${history[index][6]}"; direction: "${history[index][7]}"; lv: "${history[index][1]}"; time: "${history[index][2]}"; nbMistakes: ${history[index][3]}; mistakes: "${history[index][4]}"}`,historyColumn,"revisionSelector")
                     paire = !paire
             }
         }
@@ -347,14 +347,14 @@ Item {
                     anchors.topMargin: 0
                     anchors.bottomMargin: 0
 
-                    width: parent.width / 6
+                    width: parent.width / 8
 
 
                 }
 
                 Label{
-                    id: lvLabelHistory
-                    text: "Niveau"
+                    id: modeLabelHistory
+                    text: "Mode"
                     color: medium_text_color
 
                     anchors.left: dayLabelHistory.right
@@ -367,7 +367,43 @@ Item {
                     anchors.topMargin: 0
                     anchors.bottomMargin: 0
 
-                    width: parent.width / 6
+                    width: parent.width / 8
+                }
+
+                Label{
+                    id: directionLabelHistory
+                    text: "Direction"
+                    color: medium_text_color
+
+                    anchors.left: modeLabelHistory.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    verticalAlignment: Text.AlignVCenter
+                    leftPadding: 5
+                    font.pointSize: 10
+                    anchors.leftMargin: 0
+                    anchors.topMargin: 0
+                    anchors.bottomMargin: 0
+
+                    width: parent.width / 8
+                }
+
+                Label{
+                    id: lvLabelHistory
+                    text: "Niveau"
+                    color: medium_text_color
+
+                    anchors.left: directionLabelHistory.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    verticalAlignment: Text.AlignVCenter
+                    leftPadding: 5
+                    font.pointSize: 10
+                    anchors.leftMargin: 0
+                    anchors.topMargin: 0
+                    anchors.bottomMargin: 0
+
+                    width: parent.width / 8
                 }
 
                 Label{
@@ -385,7 +421,7 @@ Item {
                     anchors.topMargin: 0
                     anchors.bottomMargin: 0
 
-                    width: parent.width / 6
+                    width: parent.width / 8
                 }
 
                 Label{
@@ -403,7 +439,7 @@ Item {
                     anchors.topMargin: 0
                     anchors.bottomMargin: 0
 
-                    width: parent.width / 6
+                    width: parent.width / 8
                 }
 
                 Label{
@@ -561,6 +597,6 @@ Item {
 
 /*##^##
 Designer {
-    D{i:0;autoSize:true;height:480;width:640}
+    D{i:0;autoSize:true;height:480;width:700}
 }
 ##^##*/

@@ -7,25 +7,25 @@
             "peut-être",
             "maybe",
             "ici aussi",
-            1
+            2
         ],
         [
             "non",
             "no",
             "",
-            2
+            3
         ],
         [
             "oui",
             "yes",
             "donc ici il y a un context",
-            1
+            2
         ],
         [
             "bientôt",
             "soon",
             "",
-            2
+            3
         ]
     ],
     "historique": [
@@ -97,6 +97,15 @@
             11,
             "QCM",
             "default"
+        ],
+        [
+            1628604160.597277,
+            "Tue Aug 10 16:02:40 2021",
+            35.7,
+            [],
+            11,
+            "QCM",
+            "opposite"
         ]
     ]
 }
