@@ -14,18 +14,35 @@ Item {
     property string reload: ""
     property int reload_: 0
 
+    property int popupHistoryX: -1
+    property int popupHistoryY: -1
+
     property int indexHover:-1
     property var lvs: []
 
     onReloadChanged: if(reload_ == 0){reload_ = 1}else{destroy()}
+    
     onIndexHoverChanged: {
         if(indexHover === -1){
             popupHistory.visible = false
         }else{
             popupHistory.visible = true
-            popupHistory.x =(graph.width * (((parseInt(indexHover)+1) * 2) -1) * (1/((lvs.length*2) - 1))) - (popupHistory.width + 25)
-            popupHistory.y = (graph.height * ((100 - lvs[indexHover][5])/ 100)) - 20
-            popupHistory.z = 200
+
+            if (popupHistoryX === -1){
+                popupHistoryX = (graph.width * (((parseInt(indexHover)+1) * 2) -1) * (1/((lvs.length*2) - 1))) - (popupHistory.width + 25)
+                popupHistoryY = (graph.height * ((100 - lvs[indexHover][5])/ 100)) - 20
+
+                popupHistory.x = popupHistoryX
+                popupHistory.y = popupHistoryY
+            }else{
+                popupHistoryX = (graph.width * (((parseInt(indexHover)+1) * 2) -1) * (1/((lvs.length*2) - 1))) - (popupHistory.width + 25)
+                popupHistoryY = (graph.height * ((100 - lvs[indexHover][5])/ 100)) - 20
+
+                animationX.running = true
+                animationY.running = true
+            }
+
+
             datePopUp.text = lvs[indexHover][0]
             modePopUp.text = `mode: ${lvs[indexHover][6]}`
             directionPopUp.text = `direction: ${lvs[indexHover][7]}`
@@ -261,7 +278,6 @@ Item {
                     }
                 }
 
-
                 Item{
                     id: triangle
 
@@ -289,9 +305,9 @@ Item {
                     }
                 }
 
+                PropertyAnimation { id: animationX; target: popupHistory; property: "x"; to: popupHistoryX; duration: 100; easing.type: Easing.InOutQuint}
+                PropertyAnimation { id: animationY; target: popupHistory; property: "y"; to: popupHistoryY; duration: 100; easing.type: Easing.InOutQuint}
             }
-
-
             Row{
                 id: graphRow
                 anchors.fill: parent
