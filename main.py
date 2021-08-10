@@ -224,6 +224,7 @@ class MainWindow(QObject):
                 shutil.copy2(path, "listes")
 
     sendCheckedName = Signal(str)
+    sendNewFile = Signal()
     @Slot(str)
     def checkName(self, name):
         # When the user click on New list button he has to chose the name of the list but since it's gonna be a file
@@ -245,6 +246,7 @@ class MainWindow(QObject):
             self.write(content_list, name)
 
             self.sendCheckedName.emit(name)
+            self.sendNewFile.emit()
             return True
 
         except:  # Not good to do a such large except but it shouldn't be necessary anyway so I just keep it like that

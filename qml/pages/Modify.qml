@@ -492,6 +492,13 @@ Item{
             backend.getWords(currentList)
         }
 
+        function onSendNewFile(){
+            console.log("-----------------------")
+            if (currentListLabel.text === ""){
+                currentListLabel.text = currentList
+            }
+        }
+
         function onCheckedList(message){
             if(message === "ok"){
                 stackView.replace(Qt.resolvedUrl("../pages/HomePage.qml"))
@@ -520,6 +527,6 @@ Item{
 }
 /*##^##
 Designer {
-    D{i:0;autoSize:true;formeditorZoom:3;height:480;width:640}D{i:10}D{i:33}
+    D{i:0;autoSize:true;formeditorZoom:3;height:480;width:640}
 }
 ##^##*/
