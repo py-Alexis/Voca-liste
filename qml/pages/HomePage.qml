@@ -15,6 +15,7 @@ Item {
     property bool modifierClicked: false
     property string destroy_: ""
     property int reloadList: 0
+    property int reloadGraph: 0
 
     // use to not let revise an empty list
     property int currentListNbWord: -1
@@ -79,8 +80,6 @@ Item {
             }
         }
 
-
-
         function createWordDisplay(wordList){
 
             var pair = true
@@ -97,6 +96,11 @@ Item {
             reloadList = reloadList + 1
             reloadList = reloadList - 1
             backend.getListList()
+        }
+
+        function createGraph(){
+            var objectString = "import QtQuick 2.15; import '../pages'; import '../controls/HomePage'; CustomGraph{reload: destroy_; z:100; visible: true; id: customGraph; anchors.fill: graph}"
+            var newObject =  Qt.createQmlObject(objectString, graph,"graph")
         }
     }
 
@@ -162,7 +166,6 @@ Item {
                             newFolderInput.text = ""
                         }
                         onRejected:{
-                            console.log("c'est non finalement")
                             newFolderInput.text = ""
                         }
                     }
@@ -354,7 +357,7 @@ Item {
 
             Rectangle {
                 id: graph
-                height: parent.height / 3
+                height: parent.height / 2.5
                 color: medium_color
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -364,28 +367,15 @@ Item {
                 anchors.topMargin: 20
 
                 radius: 5
+                z: 2
 
                 visible: listIsSelected
-
-                Label {
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pointSize: 25
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    color: medium_text_color
-
-                    text: "NO DATA"
-
-                    opacity: 0.3
-                }
             }
 
             Rectangle{
                 id: wordDisplayHeader
 
                 height: labelMot.height+10
-
-
 
                 color: light_color
                 anchors.left: parent.left
@@ -498,16 +488,20 @@ Item {
 
     Connections{
         target: backend
+
         // Custom Top Bar
         function onSendListList(listlist){
             internal.createCategorie(listlist)
         }
 
+        // On List Click
         function onSendWordList(wordlist){
             if (modifierClicked === false){
-                listIsSelected = true
                 internal.createWordDisplay(wordlist)
+                internal.createGraph()
+                listIsSelected = true
                 currentListNbWord = wordlist.length
+
             }
         }
 
@@ -526,6 +520,15 @@ Item {
                 currentList = result
                 currentMode = "langue"
                 stackView.push(Qt.resolvedUrl("../pages/Modify.qml"))
+            }
+        }
+
+        // when the theme is change the graph need to be reload
+        function onSendTheme(){
+            if(currentList !== ""){
+                destroy_ = "qmlsdkfj"
+                destroy_ = currentList
+                backend.getWords(currentList)
             }
         }
 

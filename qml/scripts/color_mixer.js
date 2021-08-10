@@ -53,6 +53,3 @@ function mix_hexes(...hexes) {
   return mixture_hex;
 }
 
-function test(){
-    console.log("test")
-}

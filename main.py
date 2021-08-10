@@ -69,9 +69,10 @@ class MainWindow(QObject):
             if element[3] != -1:
                 lv_sum += element[3]
 
-        return round((lv_sum / (nb_word * 6)) * 100, 1)
+        return round((lv_sum / (nb_word * 7)) * 100, 1)
 
     sendWordList = Signal("QVariant", bool)
+    sendHistory = Signal("QVariant")
     @Slot(str)
     def getWords(self, listName, newLine=False):
         # Send the list of word in the list call "listName"
@@ -82,6 +83,42 @@ class MainWindow(QObject):
         content_list = self.read(listName)
 
         self.sendWordList.emit(content_list["liste"], newLine)
+        self.sendHistory.emit(self.get_history(listName))
+
+    def get_history(self, liste):
+        # return the history of the list (but just the important parts)
+        # [[date, lvString, timeSpent, nbMistake, mistakes, lvNumber],
+        # ['23 Jul 2021\n18 : 51', '50.0% -> 33.3%', '00:09', 4, 'mistake1 mistake2 mistake3 mistake4', 33.3] ...]
+
+        content_liste = self.read(liste)
+
+        history = []
+
+        for index, element in enumerate(content_liste["historique"]):
+            # date format
+            history.append([datetime.datetime.fromtimestamp(element[0]).strftime('%d %b %G\n%H : %M')])
+
+            if index == 0:
+                history[0].append(f"0% -> {element[2]}%")
+            else:
+                history[index].append(f"{content_liste['historique'][index - 1][2]}% -> {element[2]}%")
+
+            history[index].append(f"{format(int(element[4] // 60), '02d')}:{format(int(element[4] % 60), '02d')}")
+
+            history[index].append(len(element[3]))
+
+            mistakes = ""
+            for mistake in element[3]:
+                mistakes += mistake[0]
+                mistakes += " "
+
+            history[index].append(mistakes)
+            history[index].append(element[2])
+            history[index].append(element[5])
+            history[index].append(element[6])
+
+        return history
+
     # --------END GENERAL FUNCTION---------
 
     sendCloseAsk = Signal()
@@ -403,33 +440,8 @@ class MainWindow(QObject):
 
         nb_word = len(content_liste["liste"])
 
-        history = []
+        self.sendListInfo.emit([nb_word, self.get_list_percentage(liste), self.get_history(liste)])
 
-        for index, element in enumerate(content_liste["historique"]):
-            # date format
-            history.append([datetime.datetime.fromtimestamp(element[0]).strftime('%d %b %G\n%H : %M')])
-
-            if index == 0:
-                history[0].append(f"0% -> {element[2]}%")
-            else:
-                history[index].append(f"{content_liste['historique'][index - 1][2]}% -> {element[2]}%")
-
-            history[index].append(f"{format(element[4] // 60, '02d')}:{element[4] % 60}")
-
-            history[index].append(len(element[3]))
-
-            mistakes = ""
-            for mistake in element[3]:
-                mistakes += mistake[0]
-                mistakes += " "
-
-            history[index].append(mistakes)
-
-        from pprint import pprint
-        pprint(history)
-
-
-        self.sendListInfo.emit([nb_word, self.get_list_percentage(liste), history])
 
     # -------  Fin Revision Selector ------
 
@@ -513,13 +525,16 @@ class MainWindow(QObject):
         real_index = word_list.index(word_list_shuffle[index - 1])
 
         if word_clicked == to_find:
-            if -1 <= word_list[real_index][3] < 3:
+            if word_list[real_index][3] == -1:
+                word_list[real_index][3] = 1
+            elif 0 <= word_list[real_index][3] < 3:
                 word_list[real_index][3] += 1
         else:
-
             history[3].append(word_list_shuffle[index - 1])
             if 1 <= word_list[real_index][3]:
                 word_list[real_index][3] -= 1
+            elif word_list[real_index][3] == -1:
+                word_list[real_index][3] = 0
 
     intializeRevision = Signal(list)
     @Slot(str, str, str)
@@ -534,11 +549,12 @@ class MainWindow(QObject):
         content_liste["liste"] = word_list
         history[2] = self.get_list_percentage()
         history.append(int(time_spend.total_seconds()))
+        history.append(revision_mode)
+        history.append(revision_direction)
         content_liste["historique"].append(history)
         self.write(content_liste, liste)
 
         # initialize resultPage
-
         result = f"{len(word_list) - len(history[3])} / {len(word_list)}"
         mistake = ""
         if len(history[3]) != 0:
@@ -546,10 +562,16 @@ class MainWindow(QObject):
                 mistake += element[0]
                 mistake += " "
 
+
+
         self.intializeRevision.emit([revision_mode, revision_direction, result, f"{history[2]}%", str(time_spend), mistake])
 
     # ---------  Fin Revision Page --------
 
+    test = Signal(int, "QVariant")
+    def testGraph(self):
+        test_ = [0, 20, 15, 30, 25, 60, 63, 45, 80]
+        self.test.emit(len(test_), test_)
 
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
@@ -573,6 +595,7 @@ if __name__ == "__main__":
     main.getTheme()
     main.getCustomTopBar()
     main.getListList()
+    main.testGraph()
 
     if not engine.rootObjects():
         sys.exit(-1)

@@ -20,11 +20,12 @@ Item {
         function createHistory(history){
             var paire = true
             for (const index in history){
-                    var newObject = Qt.createQmlObject(`import QtQuick 2.0; import "../controls/RevisionSelector"; HistoryLine{pair: ${paire}; date: "${history[index][0]}"; lv: "${history[index][1]}"; time: "${history[index][2]}"; nbMistakes: ${history[index][3]}; mistakes: "${history[index][4]}"}`,historyColumn,"revisionSelector")
+                    var newObject = Qt.createQmlObject(`import QtQuick 2.0; import "../controls/RevisionSelector"; HistoryLine{anchors.left: parent.left;anchors.leftMargin: 0;anchors.right: parent.right;anchors.rightMargin: 0;pair: ${paire}; date: "${history[index][0]}"; lv: "${history[index][1]}"; time: "${history[index][2]}"; nbMistakes: ${history[index][3]}; mistakes: "${history[index][4]}"}`,historyColumn,"revisionSelector")
                     paire = !paire
             }
         }
     }
+
 
     CustomTopDescriptionBtn {
         id: homeBtn
@@ -535,13 +536,14 @@ Item {
             listName.text = currentList
             listMode.text = `mode: ${currentMode}`
 
-            nbWord = data[1]
+            nbWord = data[0]
             listNbWord.text = `${data[0]} mots`
             listLv.text = `${data[1]} %`
 
             if(nbWord < 4){
                 ecrireBtn.checked = true
             }
+
             var history = data[2]
             if(history.length === 0){
                 noData.visible = true
