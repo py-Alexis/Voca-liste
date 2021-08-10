@@ -11,6 +11,18 @@ import "../controls/Revision"
 Item {
     id: renamePage
 
+    property string destroy_: ""
+
+    QtObject{
+        id: internal
+
+        function createGraph(){
+            var objectString = "import QtQuick 2.15; import '../pages'; import '../controls/HomePage'; CustomGraph{reload: destroy_; z:100; visible: true; id: customGraph; anchors.fill: graph}"
+            var newObject =  Qt.createQmlObject(objectString, graph,"graph")
+        }
+    }
+
+
     Item{
         id: title
         width: 200
@@ -205,18 +217,6 @@ Item {
             radius: 5
 
             color: medium_color
-
-            Label {
-                anchors.verticalCenter: parent.verticalCenter
-                font.pointSize: 25
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                color: medium_text_color
-
-                text: "NO DATA"
-
-                opacity: 0.3
-            }
         }
     }
 
@@ -264,8 +264,9 @@ Item {
     Connections{
         target: backend
 
-        function onIntializeRevision(info){
+        function onIntializeResult(info){
             //[revision_mode, revision_direction, result, percentage, time_spend, mistake]
+            internal.createGraph()
             listName.text = currentList
             listMode.text = currentMode
 

@@ -536,7 +536,7 @@ class MainWindow(QObject):
             elif word_list[real_index][3] == -1:
                 word_list[real_index][3] = 0
 
-    intializeRevision = Signal(list)
+    intializeResult = Signal(list)
     @Slot(str, str, str)
     def finish(self, liste, revision_mode, revision_direction):
         # activate when user finish the revision
@@ -564,14 +564,11 @@ class MainWindow(QObject):
 
 
 
-        self.intializeRevision.emit([revision_mode, revision_direction, result, f"{history[2]}%", str(time_spend), mistake])
+        self.intializeResult.emit([revision_mode, revision_direction, result, f"{history[2]}%", str(time_spend), mistake])
+        self.sendHistory.emit(self.get_history(liste))
 
-    # ---------  Fin Revision Page --------
+    # ---------  End Revision Page --------
 
-    test = Signal(int, "QVariant")
-    def testGraph(self):
-        test_ = [0, 20, 15, 30, 25, 60, 63, 45, 80]
-        self.test.emit(len(test_), test_)
 
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
@@ -595,7 +592,6 @@ if __name__ == "__main__":
     main.getTheme()
     main.getCustomTopBar()
     main.getListList()
-    main.testGraph()
 
     if not engine.rootObjects():
         sys.exit(-1)
