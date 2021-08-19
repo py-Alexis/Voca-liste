@@ -69,7 +69,7 @@ class MainWindow(QObject):
             if element[3] != -1:
                 lv_sum += element[3]
 
-        return round((lv_sum / (nb_word * 7)) * 100, 1)
+        return round((lv_sum / (nb_word * 6)) * 100, 1)
 
     sendWordList = Signal("QVariant", bool)
     sendHistory = Signal("QVariant")
@@ -459,14 +459,16 @@ class MainWindow(QObject):
         # revision_mode: "write" or "QCM"
         # revision_direction: "default" (definition => mot); "opposite" (mot => definition); "random"
 
-        global word_list
-        global word_list_shuffle
-        global history
         global time_start
         time_start = datetime.datetime.now()
+
+        global word_list
+        global word_list_shuffle
         word_list = self.read(liste)["liste"]
         word_list_shuffle = self.read(liste)["liste"]
         random.shuffle(word_list_shuffle)
+
+        global history
         history = [time.time(), time.ctime(), -1, []]
 
         self.initializeRevision.emit([revision_mode, revision_direction, len(word_list)])
@@ -477,11 +479,11 @@ class MainWindow(QObject):
     @Slot(str, str, int)
     def next_word(self, revision_mode, revision_direction, index):
         # send the next word in the form of a dictionary:
-        # "displayWord" : "word", "toFindWord": "coresponding word", "context" : "if some context",
-        # "hint" : ["word1", "word2", "word3_if_in_qcm_mode"]
+        # {"displayWord" : "word", "toFindWord": "corresponding word", "context" : "if some context",
+        # "hint" : ["word1", "word2", "word3_if_in_qcm_mode"], "current_direction" = "default"}
         index -= 1
 
-        next_word_info = {"displayWord" : "", "toFindWord": "", "context" : False, "hint" : []}
+        next_word_info = {"displayWord": "", "toFindWord": "", "context": False, "hint": [], "current_direction": "" }
 
         if revision_direction == "random":
             revision_direction = random.choice(["default", "opposite"])
@@ -489,9 +491,11 @@ class MainWindow(QObject):
         if revision_direction == "default":
             next_word_info["displayWord"] = word_list_shuffle[index][1]
             next_word_info["toFindWord"] = word_list_shuffle[index][0]
+            next_word_info["current_direction"] = "default"
         else:
             next_word_info["displayWord"] = word_list_shuffle[index][0]
             next_word_info["toFindWord"] = word_list_shuffle[index][1]
+            next_word_info["current_direction"] = "opposite"
 
         if word_list_shuffle[index][2] != "":
             next_word_info["context"] = word_list_shuffle[index][2]
@@ -513,14 +517,66 @@ class MainWindow(QObject):
                         if new_hint[1] not in next_word_info["hint"]:
                             next_word_info["hint"].append(new_hint[1])
 
-        next_word_info["hint"].append(next_word_info["toFindWord"])
-        random.shuffle(next_word_info["hint"])
+            next_word_info["hint"].append(next_word_info["toFindWord"])
+            random.shuffle(next_word_info["hint"])
+
         self.new_word.emit(next_word_info)
 
     send_call_next_word = Signal()
     @Slot()
     def call_next_word(self):
         self.send_call_next_word.emit()
+
+    send_checked_answer = Signal(bool, str) # result (bool), goodAnswer
+    @Slot(str, int, str)
+    def check_answer_write(self, answer, index, direction):
+        # check if the answer the user type is correct (not taking into consideration the brackets etc.)
+
+        direction = 0 if direction == "default" else 1
+
+        real_index = word_list.index(word_list_shuffle[index - 1])
+
+        # Good answer
+        if answer == word_list_shuffle[index - 1][direction]:
+            result = True
+            if word_list[real_index][3] == -1:
+                word_list[real_index][3] = 1
+            elif 0 <= word_list[real_index][3] < 6:
+                word_list[real_index][3] += 1
+
+        # Wrong answer
+        else:
+            result = False
+            history[3].append(word_list_shuffle[index - 1])
+
+            if 1 <= word_list[real_index][3]:
+                word_list[real_index][3] -= 1
+            elif word_list[real_index][3] == -1:
+                word_list[real_index][3] = 0
+
+        self.send_checked_answer.emit(result, word_list_shuffle[index - 1][0])
+
+    @Slot(int)
+    def was_right(self, index):
+        # triger when I was right btn is clicked
+
+        original_list = list(word_list_shuffle[index - 1])
+
+        if 1 <= original_list[3]:
+            original_list[3] -= 1
+        elif original_list[3] == -1:
+            original_list[3] = 0
+
+        real_index = word_list.index(original_list)
+
+        del history[-1][-1]
+
+        if word_list_shuffle[index - 1][3] == -1:
+            word_list[real_index][3] = 1
+        elif 0 <= word_list_shuffle[index - 1][3] < 6:
+            word_list[real_index][3] = word_list_shuffle[index - 1][3] + 1
+        else:
+            word_list[real_index][3] = 6
 
     @Slot(str, str, int)
     def add_history(self, word_clicked, to_find, index):

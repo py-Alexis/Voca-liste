@@ -483,7 +483,7 @@ Window {
             Label {
                 id: bottomRightInfo1
                 color: medium_text_color
-                text: qsTr("| Beta 1.0")
+                text: qsTr("| Beta 1.1")
                 anchors.left: labelBottomInfo.right
                 anchors.right: parent.right
                 anchors.top: parent.top

@@ -16,6 +16,7 @@ Item {
 
     property string revisionMode: ""
     property string revisionDirection: ""
+    property string currentDirection: "" // to know the direction in random direction mode
 
     CustomTopDescriptionBtn {
         id: homeBtn
@@ -114,7 +115,7 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.topMargin: 100
-            anchors.bottomMargin: 20
+            anchors.bottomMargin: 25
             anchors.rightMargin: 150
             anchors.leftMargin: 150
 
@@ -190,6 +191,8 @@ Item {
 
             if (revisionMode === "QCM"){
                 stackViewRevision.replace(Qt.resolvedUrl("../pages/Revision/Qcm.qml"))
+            }else if(revisionMode === "write"){
+                stackViewRevision.replace(Qt.resolvedUrl("../pages/Revision/Write.qml"))
             }
         }
 
@@ -198,14 +201,16 @@ Item {
         }
 
         function onSend_call_next_word(){
+            index += 1
+
             if(revisionMode == "QCM"){
-                index += 1
                 stackViewRevision.replace(Qt.resolvedUrl("../pages/Revision/Qcm.qml"))
-                backend.next_word(revisionMode, revisionDirection, index)
+            }else if(revisionMode === "write"){
+                stackViewRevision.replace(Qt.resolvedUrl("../pages/Revision/Write.qml"))
             }
+            backend.next_word(revisionMode, revisionDirection, index)
         }
     }
-
 }
 
 /*##^##

@@ -208,38 +208,38 @@ Item{
      Connections{
          target: backend
 
-         function onNew_word(info){
-             if(displayWordLabel.text === ""){
-                 displayWordLabel.text = info["displayWord"]
-             }
-             if(qcmBtn1.text === ""){
-                 qcmBtn1.text = info["hint"][0]
-             }
-             if(qcmBtn2.text === ""){
-                 qcmBtn2.text = info["hint"][1]
-             }
-             if(qcmBtn3.text === ""){
-                 qcmBtn3.text = info["hint"][2]
-             }
-             if(qcmBtn4.text === ""){
-                 qcmBtn4.text = info["hint"][3]
-             }if(displayContextLabel.text === ""){
-                 displayContextLabel.text = info["context"]
-             }
+             function onNew_word(info){
+                 if(displayWordLabel.text === ""){
+                     displayWordLabel.text = info["displayWord"]
+                 }
+                 if(qcmBtn1.text === ""){
+                     qcmBtn1.text = info["hint"][0]
+                 }
+                 if(qcmBtn2.text === ""){
+                     qcmBtn2.text = info["hint"][1]
+                 }
+                 if(qcmBtn3.text === ""){
+                     qcmBtn3.text = info["hint"][2]
+                 }
+                 if(qcmBtn4.text === ""){
+                     qcmBtn4.text = info["hint"][3]
+                 }if(displayContextLabel.text === ""){
+                     displayContextLabel.text = info["context"]
+                 }
 
-             if(toFind === ""){
-                 toFind = info["toFindWord"]
-             }
+                 if(toFind === ""){
+                     toFind = info["toFindWord"]
+                 }
 
-             if(nextBtn.text === ""){
-                 if(index !=  nbWord){nextBtn.text = "Suivant"}else{nextBtn.text = "Terminer"}
+                 if(nextBtn.text === ""){
+                     if(index !=  nbWord){nextBtn.text = "Suivant"}else{nextBtn.text = "Terminer"}
+                 }
              }
-         }
      }
 }
 
 /*##^##
 Designer {
-    D{i:0;autoSize:true;height:1000;width:1000}
+    D{i:0;autoSize:true;formeditorZoom:0.66;height:1000;width:1000}
 }
 ##^##*/
