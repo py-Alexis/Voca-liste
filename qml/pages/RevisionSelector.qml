@@ -20,7 +20,7 @@ Item {
         function createHistory(history){
             var paire = true
             for (const index in history){
-                    var newObject = Qt.createQmlObject(`import QtQuick 2.0; import "../controls/RevisionSelector"; HistoryLine{parentWidth: historyScrollView.width;pair: ${paire}; date: "${history[index][0]}";mode: "${history[index][6]}"; direction: "${history[index][7]}"; lv: "${history[index][1]}"; time: "${history[index][2]}"; nbMistakes: ${history[index][3]}; mistakes: "${history[index][4]}"}`,historyColumn,"revisionSelector")
+                    var newObject = Qt.createQmlObject(`import QtQuick 2.0; import "../controls/RevisionSelector"; import "../../qml"; HistoryLine{parentWidth: historyScrollView.width;pair: ${paire}; date: "${history[index][0]}";mode: "${history[index][6]}"; direction: "${history[index][7]}"; lv: "${history[index][1]}"; time: "${history[index][2]}"; nbMistakes: ${history[index][3]}; mistakes: "${history[index][4]}"; backgroundColorIsPair: medium_color; backgroundColorNotPair: light_color; textColor: light_text_color}`,historyColumn,"revisionSelector")
                     paire = !paire
             }
         }

@@ -49,7 +49,6 @@ Window {
                 topBarIsVisible = true
 
                 resizeIsVisible = true
-
             }else{
                 flag = Qt.Window & ~Qt.FramelessWindowHint
                 windowMargin = 0
@@ -107,6 +106,7 @@ Window {
     visible: true
     color: "#00000000"
     title: "Voca-list"
+
     onClosing: { // for some reason qt creator raise an error "invalid property name "onClosing" but it's working
         if(isActiveTopBar === false){
             if(okToClose === false){
@@ -115,12 +115,8 @@ Window {
             }
         } // else do nothing => close app
 
-
-
-
         /* closeAsk ask the current page if it's ok to close (with a pop up message in modify for example)
         and if it's ok the page do backend.close() that emit a sendClose signal that close the page */
-
     }
 
 
@@ -136,6 +132,7 @@ Window {
         anchors.leftMargin: windowMargin
         anchors.bottomMargin: windowMargin
         anchors.topMargin: windowMargin
+        radius: if(!windowIsMaximised && topBarIsVisible){25/2}else{0}
 
         Rectangle {
             id: topBar
@@ -453,8 +450,13 @@ Window {
             }
         }
 
-        Rectangle {
+        CustomRoundRectangle {
             id: bottomBar
+
+            radius: bg.radius
+            bottomLeft: true
+            bottomRight: true
+
             height: 25
             color: medium_color
             anchors.left: parent.left

@@ -24,6 +24,7 @@ Rectangle {
     anchors.left: parent.left
     anchors.leftMargin: 0
     width: parentWidth
+    radius: 5
 
     color: if(pair){backgroundColorIsPair}else{backgroundColorNotPair}
     height: if(dayLabelHistory.height >= mistakeLabelHistory.height){
