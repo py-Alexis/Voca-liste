@@ -153,7 +153,7 @@ Item {
                 width: 5
             }
             Label{
-                text: "Niveau"
+                text: "Niveau de la liste"
                 anchors.left: parent.left
                 font.pointSize: 16
                 anchors.leftMargin: 15
