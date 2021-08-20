@@ -453,7 +453,9 @@ Item{
 
                 onYes:{
                     backend.getBackup()
+                    stackViewDirection = false
                     stackView.replace(Qt.resolvedUrl("../pages/HomePage.qml"))
+                    stackViewDirection = true
                     currentList = ""
                     currentMode = ""
                     backend.getListList()
@@ -501,7 +503,9 @@ Item{
 
         function onCheckedList(message){
             if(message === "ok"){
+                stackViewDirection = false
                 stackView.replace(Qt.resolvedUrl("../pages/HomePage.qml"))
+                stackViewDirection = true
                 currentList = ""
             }else if(message === "le nom de la liste ne peut pas être vide" || message === "le nom de la liste existe déjà"){
                 saveDialog.detailedText = ""

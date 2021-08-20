@@ -240,7 +240,9 @@ Item {
             btnColor: medium_color
 
             onClicked: {
+                stackViewDirection = false
                 stackView.replace(Qt.resolvedUrl("../pages/HomePage.qml"))
+                stackViewDirection = true
                 currentList = ""
                 backend.getListList()
             }

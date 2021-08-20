@@ -10,6 +10,7 @@ Window {
 
     property string currentList: ""
     property string currentMode: ""
+    property bool stackViewDirection: true // true = left to right ; false = right to left; set to false before changing the page and reset it to true (onFinished don't work with these animation)
 
     // PROPERTY FOR CUSTOM TOP BAR
     property bool isActiveTopBar: false
@@ -433,7 +434,7 @@ Window {
             
             replaceEnter: Transition {
                 XAnimator {
-                    from: (stackView.mirrored ? -1 : 1) * stackView.width
+                    from: if(stackViewDirection){stackView.width}else{-stackView.width}
                     to: 0
                     duration: 850
                     easing.type: Easing.InOutQuint
@@ -443,7 +444,7 @@ Window {
             replaceExit: Transition {
                 XAnimator {
                     from: 0
-                    to: (stackView.mirrored ? -1 : 1) * -stackView.width
+                    to: if(stackViewDirection){-stackView.width}else{stackView.width}
                     duration: 850
                     easing.type: Easing.InOutQuint
                 }

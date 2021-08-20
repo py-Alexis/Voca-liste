@@ -165,7 +165,9 @@ Item {
             icon: StandardIcon.Critical
 
             onYes: {
+                stackViewDirection = false
                 stackView.replace(Qt.resolvedUrl("../pages/HomePage.qml"))
+                stackViewDirection = true
                 currentList = ""
                 currentMode = ""
                 backend.getListList()

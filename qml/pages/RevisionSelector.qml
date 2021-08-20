@@ -41,7 +41,9 @@ Item {
         btnIconSource: "../../images/home_icon.svg"
 
         onClicked: {
+            stackViewDirection = false
             stackView.replace(Qt.resolvedUrl("../pages/HomePage.qml"))
+            stackViewDirection = true
             currentList = ""
             backend.getListList()
         }
@@ -501,7 +503,9 @@ Item {
                 btnColor: medium_color
 
                 onClicked: {
+                    stackViewDirection = false
                     stackView.replace(Qt.resolvedUrl("../pages/HomePage.qml"))
+                    stackViewDirection = true
                     currentList = ""
                     backend.getListList()
                 }
