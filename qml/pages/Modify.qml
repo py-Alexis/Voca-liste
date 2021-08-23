@@ -511,6 +511,10 @@ Item{
                 saveDialog.detailedText = ""
                 saveDialog.text = message
                 saveDialog.open()
+            }else if(message === "deux mots/expressions sont identiques" || message === "deux définitions/traductions sont identiques"){
+                saveDialog.detailedText = ""
+                saveDialog.text = message
+                saveDialog.open()
             }else{
                 saveDialog.text = message
                 saveDialog.detailedText = "les deux premières cases de chaques lignes doivent être remplies"

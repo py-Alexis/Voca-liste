@@ -368,11 +368,21 @@ class MainWindow(QObject):
 
         index = 1
         for element in content_list["liste"]:
-            if element[0] == "" or element[1] == "":
+            if element[0].strip() == "" or element[1].strip() == "":
                 self.checkedList.emit(f"la ligne {index} n'est pas complète")
                 return False
 
             index += 1
+
+        # check if there is duplicate word or definition
+        liste_word = [i[1] for i in content_list["liste"]]
+        liste_def = [i[0] for i in content_list["liste"]]
+        if len(liste_def) != len(set(liste_def)):
+            self.checkedList.emit("deux mots/expressions sont identiques")
+            return False
+        elif len(liste_word) != (len(set(liste_word))):
+            self.checkedList.emit("deux définitions/traductions sont identiques")
+            return False
 
         # check if the file name is not empty
         if newlistename == "":
@@ -448,7 +458,6 @@ class MainWindow(QObject):
         nb_word = len(content_liste["liste"])
 
         self.sendListInfo.emit([nb_word, self.get_list_percentage(liste), self.get_history(liste)])
-
 
     # -------  Fin Revision Selector ------
 

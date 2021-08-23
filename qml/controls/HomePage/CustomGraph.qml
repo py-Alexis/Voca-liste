@@ -28,16 +28,16 @@ Item {
         }else{
             popupHistory.visible = true
 
-            popupHistoryX = ((graph.width * (((parseInt(indexHover)+1) * 2) -1) * (1/((lvs.length*2) - 1))) - (popupHistory.width + 25)) + 45
-            popupHistoryY = ((graph.height * ((100 - lvs[indexHover][5])/ 100)) - 20) + graph.anchors.bottomMargin
-
-            console.log(popupHistoryX)
             if (popupHistoryX === -1){
-                console.log("animation not running")
+                popupHistoryX = ((graph.width * (((parseInt(indexHover)+1) * 2) -1) * (1/((lvs.length*2) - 1))) - (popupHistory.width + 25)) + 45
+                popupHistoryY = ((graph.height * ((100 - lvs[indexHover][5])/ 100)) - 20) + graph.anchors.bottomMargin
+
                 popupHistory.x = popupHistoryX
                 popupHistory.y = popupHistoryY
             }else{
-                console.log("animation running")
+                popupHistoryX = ((graph.width * (((parseInt(indexHover)+1) * 2) -1) * (1/((lvs.length*2) - 1))) - (popupHistory.width + 25)) + 45
+                popupHistoryY = ((graph.height * ((100 - lvs[indexHover][5])/ 100)) - 20) + graph.anchors.bottomMargin
+
                 animationX.running = true
                 animationY.running = true
             }
