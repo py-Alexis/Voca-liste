@@ -1,23 +1,28 @@
 # This Python file uses the following encoding: utf-8
-import sys
-import os, shutil, glob
+import datetime
+import glob
+import json
+import os
 import random
-import time, datetime
+import shutil
+import sys
+import time
 
+from api import api_list_possible
+
+from PySide2.QtCore import QObject, Slot, Signal
 from PySide2.QtGui import QGuiApplication, QIcon
 from PySide2.QtQml import QQmlApplicationEngine
-from PySide2.QtCore import QObject, Slot, Signal
-
-import json
 
 # General variable
-settings_path = "Settings\Settings.json"
+settings_path = "Settings\\Settings.json"
 
 # Global variable for Revision Page
 word_list = []
 word_list_shuffle = []
 history = []
 time_start = 0
+
 
 class MainWindow(QObject):
     def __init__(self):
@@ -536,8 +541,12 @@ class MainWindow(QObject):
 
         real_index = word_list.index(word_list_shuffle[index - 1])
 
+        # Create a list of possible answer
+        good_answer = word_list_shuffle[index - 1][direction]
+        possible_answer = api_list_possible(good_answer)
+
         # Good answer
-        if answer == word_list_shuffle[index - 1][direction]:
+        if answer.strip() in possible_answer:
             result = True
             if word_list[real_index][3] == -1:
                 word_list[real_index][3] = 1
