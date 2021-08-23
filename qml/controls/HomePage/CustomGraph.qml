@@ -28,16 +28,16 @@ Item {
         }else{
             popupHistory.visible = true
 
-            if (popupHistoryX === -1){
-                popupHistoryX = (graph.width * (((parseInt(indexHover)+1) * 2) -1) * (1/((lvs.length*2) - 1))) - (popupHistory.width + 25)
-                popupHistoryY = (graph.height * ((100 - lvs[indexHover][5])/ 100)) - 20
+            popupHistoryX = ((graph.width * (((parseInt(indexHover)+1) * 2) -1) * (1/((lvs.length*2) - 1))) - (popupHistory.width + 25)) + 45
+            popupHistoryY = ((graph.height * ((100 - lvs[indexHover][5])/ 100)) - 20) + graph.anchors.bottomMargin
 
+            console.log(popupHistoryX)
+            if (popupHistoryX === -1){
+                console.log("animation not running")
                 popupHistory.x = popupHistoryX
                 popupHistory.y = popupHistoryY
             }else{
-                popupHistoryX = (graph.width * (((parseInt(indexHover)+1) * 2) -1) * (1/((lvs.length*2) - 1))) - (popupHistory.width + 25)
-                popupHistoryY = (graph.height * ((100 - lvs[indexHover][5])/ 100)) - 20
-
+                console.log("animation running")
                 animationX.running = true
                 animationY.running = true
             }
@@ -98,7 +98,7 @@ Item {
 
             // create the path
             path += "}"
-            var line = `import QtQuick 2.15; import "../../../qml"; Canvas {property bool animationRunning: startAnimation2;clip: false;z:10; onAnimationRunningChanged:animation2.running = true; id: canva; anchors.fill: parent ; contextType: "2d" ; ${path} onPaint: { context.strokeStyle = accent_color; context.path = myPath; context.lineWidth = 3; context.lineCap = "round"; context.stroke()}opacity:0; PropertyAnimation { id: animation2; target: canva; property: "opacity"; to: 1; duration: 500; easing.type: Easing.InOutQuint}}`
+            var line = `import QtQuick 2.15; import "../../../qml"; Canvas {property bool animationRunning: startAnimation2;clip: false; onAnimationRunningChanged:animation2.running = true; id: canva; anchors.fill: parent ; contextType: "2d" ; ${path} onPaint: { context.strokeStyle = accent_color; context.path = myPath; context.lineWidth = 3; context.lineCap = "round"; context.stroke()}opacity:0; PropertyAnimation { id: animation2; target: canva; property: "opacity"; to: 1; duration: 500; easing.type: Easing.InOutQuint}}`
             var newObjectLine = Qt.createQmlObject(line, graphContainer,"graphLine")
 
             startAnimation = true
@@ -180,140 +180,140 @@ Item {
                     anchors.rightMargin: 0
                 }
             }
-
-            Rectangle{
-                id: popupHistory
-
-                color: darker_color
-                height: 150
-                width: 155
-                visible: false
-                opacity: .93
-                radius: 10
-                z: 20
-
-                transformOrigin: Item.Top
-
-                Column{
-                    id: column
-                    anchors.fill: parent
-
-                    Item{
-                        height: 5
-                        width: 10
-                    }Label{
-                        id: datePopUp
-
-                        color: light_text_color
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignTop
-                        font.pointSize: 11
-                        anchors.rightMargin: 0
-                        anchors.leftMargin: 0
-                    }
-
-                    Item{
-                        height: 12
-                        width: 10
-                    }Label{
-                        id: modePopUp
-
-                        color: light_text_color
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        font.pointSize: 9
-                        anchors.rightMargin: 0
-                        anchors.leftMargin: 10
-                    }Item{
-                        height: 3
-                        width: 10
-                    }Label{
-                        id: directionPopUp
-
-                        color: light_text_color
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        font.pointSize: 9
-                        anchors.rightMargin: 0
-                        anchors.leftMargin: 10
-                    }
-
-                    Item{
-                        height: 10
-                        width: 10
-                    }Label{
-                        id: lvPopUp
-
-                        color: light_text_color
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        font.pointSize: 9
-                        anchors.rightMargin: 0
-                        anchors.leftMargin: 10
-                    }Item{
-                        height: 3
-                        width: 10
-                    }Label{
-                        id: timeSpendPopUp
-
-                        color: light_text_color
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        font.pointSize: 9
-                        anchors.rightMargin: 0
-                        anchors.leftMargin: 10
-                    }Item{
-                        height: 3
-                        width: 10
-                    }Label{
-                        id: nbMistakePopUp
-
-                        color: light_text_color
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        font.pointSize: 9
-                        anchors.rightMargin: 0
-                        anchors.leftMargin: 10
-                    }
-                }
-
-                Item{
-                    id: triangle
-
-                    height: 20
-                    anchors.left: popupHistory.right
-                    anchors.top: popupHistory.top
-                    anchors.topMargin: 10
-                    anchors.leftMargin: -.2
-                    z: 20
-                    width: Math.sqrt((height*height)/2)
-
-                    Shape{
-                        anchors.fill: parent
-
-                        containsMode: Shape.FillContains
-
-                        ShapePath{
-                            fillColor: darker_color
-                            strokeColor: darker_color
-
-                            startX: 0; startY: 0
-                            PathLine{x: triangle.width; y: triangle.height / 2}
-                            PathLine{x: 0; y: triangle.height}
-                        }
-                    }
-                }
-
-                PropertyAnimation { id: animationX; target: popupHistory; property: "x"; to: popupHistoryX; duration: 100; easing.type: Easing.InOutQuint}
-                PropertyAnimation { id: animationY; target: popupHistory; property: "y"; to: popupHistoryY; duration: 100; easing.type: Easing.InOutQuint}
-            }
             Row{
                 id: graphRow
                 anchors.fill: parent
             }
         }
+
+        Rectangle{
+            id: popupHistory
+
+            color: darker_color
+            height: 150
+            width: 155
+            visible: false
+            opacity: .93
+            radius: 10
+            z: 1
+
+            transformOrigin: Item.Top
+
+            Column{
+                id: column
+                anchors.fill: parent
+
+                Item{
+                    height: 5
+                    width: 10
+                }Label{
+                    id: datePopUp
+
+                    color: light_text_color
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignTop
+                    font.pointSize: 11
+                    anchors.rightMargin: 0
+                    anchors.leftMargin: 0
+                }
+
+                Item{
+                    height: 12
+                    width: 10
+                }Label{
+                    id: modePopUp
+
+                    color: light_text_color
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    font.pointSize: 9
+                    anchors.rightMargin: 0
+                    anchors.leftMargin: 10
+                }Item{
+                    height: 3
+                    width: 10
+                }Label{
+                    id: directionPopUp
+
+                    color: light_text_color
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    font.pointSize: 9
+                    anchors.rightMargin: 0
+                    anchors.leftMargin: 10
+                }
+
+                Item{
+                    height: 10
+                    width: 10
+                }Label{
+                    id: lvPopUp
+
+                    color: light_text_color
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    font.pointSize: 9
+                    anchors.rightMargin: 0
+                    anchors.leftMargin: 10
+                }Item{
+                    height: 3
+                    width: 10
+                }Label{
+                    id: timeSpendPopUp
+
+                    color: light_text_color
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    font.pointSize: 9
+                    anchors.rightMargin: 0
+                    anchors.leftMargin: 10
+                }Item{
+                    height: 3
+                    width: 10
+                }Label{
+                    id: nbMistakePopUp
+
+                    color: light_text_color
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    font.pointSize: 9
+                    anchors.rightMargin: 0
+                    anchors.leftMargin: 10
+                }
+            }
+
+            Item{
+                id: triangle
+
+                height: 20
+                anchors.left: popupHistory.right
+                anchors.top: popupHistory.top
+                anchors.topMargin: 10
+                anchors.leftMargin: -.2
+                width: Math.sqrt((height*height)/2)
+
+                Shape{
+                    anchors.fill: parent
+
+                    containsMode: Shape.FillContains
+
+                    ShapePath{
+                        fillColor: darker_color
+                        strokeColor: darker_color
+
+                        startX: 0; startY: 0
+                        PathLine{x: triangle.width; y: triangle.height / 2}
+                        PathLine{x: 0; y: triangle.height}
+                    }
+                }
+            }
+
+            PropertyAnimation { id: animationX; target: popupHistory; property: "x"; to: popupHistoryX; duration: 100; easing.type: Easing.InOutQuint}
+            PropertyAnimation { id: animationY; target: popupHistory; property: "y"; to: popupHistoryY; duration: 100; easing.type: Easing.InOutQuint}
+        }
+
     }
 
     Connections{
