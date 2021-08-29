@@ -16,7 +16,7 @@ Item {
 
     property string revisionMode: ""
     property string revisionDirection: ""
-    property string currentDirection: "" // to know the direction in random direction mode
+    property string currentDirection: "" // to know the direction in random mode
 
     CustomTopDescriptionBtn {
         id: homeBtn

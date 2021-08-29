@@ -14,20 +14,6 @@ Item{
     property bool clickable: true
     property bool result: true
 
-    QtObject{
-        id: internal
-
-        function colorGoodAnswer(wordClicked){
-            clickable = false
-
-            if(displayContextLabel.text !== "false"){
-                animationContext.running = true
-            }
-
-            backend.add_history(wordClicked, toFind, index)
-        }
-    }
-
      Rectangle{
          id: displayWordWrite
 

@@ -17,7 +17,7 @@ Item {
     property int reloadList: 0
     property int reloadGraph: 0
 
-    // use to not let revise an empty list
+    // is used to prevent the user from revising an empty list
     property int currentListNbWord: -1
 
 
@@ -28,7 +28,7 @@ Item {
             var paire = false
 
             if(listlist.hasOwnProperty('None')){
-                // les listes sans catégories sont afficher en haut sans l'encadré avec le nom de la catégorie
+                // lists without categories are displayed at the top without the box with the category name
                 for (const list in listlist["None"]){
                     var objectString_ = `import QtQuick 2.0; import QtQuick.Controls 2.15; import "../controls/HomePage"; import "../"; CustomListList{listName: "${listlist["None"][list][0]}"; listMode: "${listlist["None"][list][1]}" ;btnColorIsPair: medium_color; btnColorActive: accent_color; backgroundColor: light_color; textColor: light_text_color;currentListName: currentList;pairColor:${paire}; onClicked: internal.listClick(listName, listMode); reload: reloadList}`
                     paire = !paire
@@ -40,10 +40,10 @@ Item {
             }
             for (const categorie in listlist){
 
-                // les deux newitem sont juste là  pour régler l'espacement verticale (je sais pas faire autrement dans un column)
+                // the two newitem are just there to adjust the vertical spacing (I don't know how to do otherwise in a column)
                 var newItem = Qt.createQmlObject('import QtQuick 2.0;import "../controls/HomePage";CustomSpacing{itemHeight: 20;itemWidth: 1; reload: reloadList}',settingsColumn,"home");
 
-                // Creation de l'encadré avec la catégorie
+                // Creation of the box with the category
                 var objectString = `import QtQuick 2.0; import QtQuick.Controls 2.15; import "../controls/HomePage"; import "../"; CustomCategorie{text_: "${categorie}"; backgroundColor: medium_color;textColor: light_text_color; reload: reloadList}`
                 var newObject = Qt.createQmlObject(objectString,settingsColumn,"home");
 
@@ -519,11 +519,11 @@ Item {
             }else {
                 currentList = result
                 currentMode = "langue"
-                stackView.push(Qt.resolvedUrl("../pages/Modify.qml"))
+                stackView.replace(Qt.resolvedUrl("../pages/Modify.qml"))
             }
         }
 
-        // when the theme is change the graph need to be reload
+        // when the user changes the theme the graph needs to be refreshed
         function onSendTheme(){
             if(currentList !== ""){
                 destroy_ = "qmlsdkfj"

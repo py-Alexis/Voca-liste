@@ -190,8 +190,8 @@ Item {
             id: popupHistory
 
             color: darker_color
-            height: 150
-            width: 155
+            height: 190
+            width: 180
             visible: false
             opacity: .93
             radius: 10
@@ -246,7 +246,7 @@ Item {
                 }
 
                 Item{
-                    height: 10
+                    height: 13
                     width: 10
                 }Label{
                     id: lvPopUp
