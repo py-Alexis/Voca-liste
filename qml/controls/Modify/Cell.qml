@@ -57,7 +57,7 @@ Item {
                 if(row !== rowCount - 1){
                     getCellToSelected_ = [row + 1, 0]
                 }else{
-                    backend.newLineOnEnter() // this function just tell the modify qml to create a newLine
+                    backend.new_line_on_enter() // this function just tell the modify qml to create a new line
                 }
             }
         }
@@ -121,7 +121,7 @@ Item {
             // on tab pressed => Keys.onPressed: { if (event.key === Qt.Key_Tab) internal.nextCellEnter() } mais enleve le focus sur l'input
 
             onTextEdited: {
-                backend.updateWord(currentList, row, column, text)
+                backend.update_word(currentList, row, column, text)
             }
 
 

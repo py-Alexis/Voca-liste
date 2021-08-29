@@ -72,9 +72,9 @@ Item {
 
         function onGetCurrentRow(fonction){
             if (fonction === "suppLine"){
-            backend.suppLine(currentList, currentRow)
+            backend.del_line(currentList, currentRow)
             }else if (fonction === "resetLv"){
-                backend.resetLv(currentList, currentRow)
+                backend.reset_lv(currentList, currentRow)
             }
 
         }

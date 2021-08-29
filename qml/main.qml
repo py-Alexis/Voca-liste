@@ -90,7 +90,7 @@ Window {
             // Creation of the TabButton String
             var style = "contentItem: Text {color: parent.checked ? light_text_color :medium_text_color;text: parent.text;font: parent.font;horizontalAlignment: Text.AlignHCenter;verticalAlignment: Text.AlignVCenter;}background: Rectangle{color: parent.checked ? accent_color: medium_color;opacity: parent.down ? 0.75: 1;}"
             var isActive = ButtonName === activeTheme ? true: false
-            var objectString = `import QtQuick 2.0; import QtQuick.Controls 2.15; TabButton {text: qsTr('${ButtonName}');checked: ${isActive}; onClicked: backend.changeTheme(text); ${style}}`
+            var objectString = `import QtQuick 2.0; import QtQuick.Controls 2.15; TabButton {text: qsTr('${ButtonName}');checked: ${isActive}; onClicked: backend.change_theme(text); ${style}}`
 
             var newObject = Qt.createQmlObject(objectString,themeSelector,"main"); // Creation of the tabButton
         }
@@ -112,11 +112,11 @@ Window {
         if(isActiveTopBar === false){
             if(okToClose === false){
                 close.accepted = false
-                backend.closeAsk()
+                backend.close_ask()
             }
         } // else do nothing => close app
 
-        /* closeAsk ask the current page if it's ok to close (with a pop up message in modify for example)
+        /* close_ask ask the current page if it's ok to close (with a pop up message in modify for example)
         and if it's ok the page do backend.close() that emit a sendClose signal that close the page */
     }
 
@@ -196,8 +196,8 @@ Window {
                     btnColorClicked: "#ff007f"
                     btnLogo: light_text_color
                     btnIconSource: "../images/close_icon.svg"
-                    onClicked: backend.closeAsk()
-                    /* closeAsk ask the current page if it's ok to close (with a pop up message in modify for example)
+                    onClicked: backend.close_ask()
+                    /* close_ask ask the current page if it's ok to close (with a pop up message in modify for example)
                     and if it's ok the page do backend.close() that emit a sendClose signal that close the page */
                 }
             }
@@ -391,7 +391,7 @@ Window {
 
 
                         onClicked: {
-                            backend.switchTopBar(settingsToggleTopBar.checked)
+                            backend.switch_top_bar(settingsToggleTopBar.checked)
                         }
                     }
 

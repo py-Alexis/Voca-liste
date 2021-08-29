@@ -81,16 +81,16 @@ class MainWindow(QObject):
     sendWordList = Signal("QVariant", bool)
     sendHistory = Signal("QVariant")
     @Slot(str)
-    def getWords(self, listName, newLine=False):
+    def get_words(self, list_name, new_line=False):
         # Send the list of word in the list call "listName"
         #
-        # When we click on newLine button in the modify page it destroy the table create a newLine and recreate the
-        # table but this time since newLine is set to True it automatically scroll down and select the new line
+        # When we click on newLine button in the modify page it destroy the table create a new line and recreate the
+        # table but this time since new_line is set to True it automatically scroll down and select the new line
 
-        content_list = self.read(listName)
+        content_list = self.read(list_name)
 
-        self.sendWordList.emit(content_list["liste"], newLine)
-        self.sendHistory.emit(self.get_history(listName))
+        self.sendWordList.emit(content_list["liste"], new_line)
+        self.sendHistory.emit(self.get_history(list_name))
 
     def get_history(self, liste):
         # return the history of the list (but just the important parts)
@@ -99,38 +99,38 @@ class MainWindow(QObject):
 
         content_liste = self.read(liste)
 
-        history = []
+        formatted_history = []
 
         for index, element in enumerate(content_liste["historique"]):
             # date format
-            history.append([datetime.datetime.fromtimestamp(element[0]).strftime('%d %b %G\n%H : %M')])
+            formatted_history.append([datetime.datetime.fromtimestamp(element[0]).strftime('%d %b %G\n%H : %M')])
 
             if index == 0:
-                history[0].append(f"0% -> {element[2]}%")
+                formatted_history[0].append(f"0% -> {element[2]}%")
             else:
-                history[index].append(f"{content_liste['historique'][index - 1][2]}% -> {element[2]}%")
+                formatted_history[index].append(f"{content_liste['historique'][index - 1][2]}% -> {element[2]}%")
 
-            history[index].append(f"{format(int(element[4] // 60), '02d')}:{format(int(element[4] % 60), '02d')}")
+            formatted_history[index].append(f"{format(int(element[4] // 60), '02d')}:{format(int(element[4] % 60), '02d')}")
 
-            history[index].append(len(element[3]))
+            formatted_history[index].append(len(element[3]))
 
             mistakes = ""
             for mistake in element[3]:
                 mistakes += mistake[0]
                 mistakes += " "
 
-            history[index].append(mistakes)
-            history[index].append(element[2])
-            history[index].append(element[5])
-            history[index].append(element[6])
+            formatted_history[index].append(mistakes)
+            formatted_history[index].append(element[2])
+            formatted_history[index].append(element[5])
+            formatted_history[index].append(element[6])
 
-        return history
+        return formatted_history
 
     # --------END GENERAL FUNCTION---------
 
     sendCloseAsk = Signal()
     @Slot()
-    def closeAsk(self):
+    def close_ask(self):
         # Ask the current Page if it's ok to close (ex: for the modify page if you close you lose the modification)
         self.sendCloseAsk.emit()
 
@@ -140,7 +140,7 @@ class MainWindow(QObject):
         self.sendClose.emit()
 
     sendThemeList = Signal(list, str)
-    def themeList(self):
+    def theme_list(self):
         # sends the list of themes to fill the tapBar in the settings panel
 
         content_settings = self.read(path=settings_path)
@@ -148,7 +148,7 @@ class MainWindow(QObject):
         self.sendThemeList.emit(content_settings["Theme List"], content_settings["Active Theme"])
 
     sendTheme = Signal("QVariant")
-    def getTheme(self):
+    def get_theme(self):
         # Send the color theme to main.qml
 
         content_settings = self.read(path=settings_path)
@@ -159,7 +159,7 @@ class MainWindow(QObject):
         # content to main.qml
 
     @Slot(str)
-    def changeTheme(self, theme):
+    def change_theme(self, theme):
         # change the theme just by changing the active theme in the setting.json file and then call get theme to send
         # the colors to main.qml
 
@@ -167,10 +167,10 @@ class MainWindow(QObject):
         content_settings["Active Theme"] = theme
         self.write(content_settings, path=settings_path)
 
-        self.getTheme()
+        self.get_theme()
 
     intializeCustomTopBar = Signal(bool)
-    def getCustomTopBar(self):
+    def get_custom_top_bar(self):
         # send to main.qml file the status of the custom top bar so that it stays the same when you close the app
 
         content_settings = self.read(path=settings_path)
@@ -179,15 +179,15 @@ class MainWindow(QObject):
 
     sendCustomTopBar = Signal(bool)
     @Slot(bool)
-    def switchTopBar(self, statut):
+    def switch_top_bar(self, state):
         # Switch custom top bar status
 
         # Change the status of the custom top bar so that the app remembers it when you close it
         content_settings = self.read(path=settings_path)
-        content_settings["Custom Top Bar"] = not statut
+        content_settings["Custom Top Bar"] = not state
         self.write(content_settings, path=settings_path)
 
-        self.sendCustomTopBar.emit(not statut)
+        self.sendCustomTopBar.emit(not state)
 
     # -------------------------------------
     # --------------HOME PAGE--------------
@@ -195,32 +195,32 @@ class MainWindow(QObject):
 
     sendListList = Signal("QVariant")
     @Slot()
-    def getListList(self):
+    def get_list_list(self):
         # sends a dictionary of all lists (and listMode) sorted by category
         #       {"category 1": [["list 1", listMode], ["list 2", listMode], ["list 3", listMode]],
         #        "category 2": [["list 6", listMode], ["list 4", listMode]]}
 
-        list_fichier = os.listdir("listes")  # get the list of json file
-        listesCategorie = {}
+        list_file = os.listdir("listes")  # get the list of json file
+        list_category = {}
 
-        for fichier in list_fichier:
+        for file in list_file:
 
-            content_list = self.read(path="listes/" + fichier)
+            content_list = self.read(path="listes/" + file)
 
-            if content_list["catégorie"] in listesCategorie:  # if the category is in the dictionary append the list
-                listesCategorie[content_list["catégorie"]].append([fichier.replace(".json", ""), content_list["mode"]])
+            if content_list["catégorie"] in list_category:  # if the category is in the dictionary append the list
+                list_category[content_list["catégorie"]].append([file.replace(".json", ""), content_list["mode"]])
 
             else:  # if the category don't exist in the dictionary create it in the dictionary with the list
-                listesCategorie[content_list["catégorie"]] = [[fichier.replace(".json", ""), content_list["mode"]]]
+                list_category[content_list["catégorie"]] = [[file.replace(".json", ""), content_list["mode"]]]
 
-        self.sendListList.emit(listesCategorie)  # send the dictionary to qml file "HomePage.qml"
+        self.sendListList.emit(list_category)  # send the dictionary to qml file "HomePage.qml"
 
     @Slot("QVariant")
-    def importListe(self, listurls):
+    def import_liste(self, list_urls):
         # when the user wants to import lists an explorer window opens for him to choose.
         # when it validates this function checks that the selected files do not exist
 
-        for url in listurls:
+        for url in list_urls:
             path = str(url)[29:-2]  # Urls given by the explorer dialog are a bit weird so I have to remove some chars
 
             if os.path.isfile("listes/" + os.path.basename(path)):
@@ -231,7 +231,7 @@ class MainWindow(QObject):
     sendCheckedName = Signal(str)
     sendNewFile = Signal()
     @Slot(str)
-    def checkName(self, name):
+    def check_name(self, name):
         # when the user creates a new list he has to choose its name but as it is the name of a file it has to
         # respect some standard (it must not already exist and must not contain certain characters)
 
@@ -259,8 +259,8 @@ class MainWindow(QObject):
             return False
 
     @Slot(str)
-    def supprimer(self, listeName):
-        os.remove("listes/" + listeName + ".json")
+    def del_file(self, liste_name):
+        os.remove("listes/" + liste_name + ".json")
 
     # ------------FIN HOME PAGE------------
 
@@ -270,8 +270,8 @@ class MainWindow(QObject):
 
     sendCreateTable = Signal(str)
     @Slot(str)
-    def createTable(self, list):
-        # backup the file so we can cancel the modification and send the categorie of the list
+    def create_table(self, liste):
+        # backup the file so we can cancel the modification and send the category of the list
 
         # delete files in backup folder
         if len(os.listdir('Settings/Backup')) != 0:
@@ -279,9 +279,9 @@ class MainWindow(QObject):
             for f in files:
                 os.remove(f)
 
-        shutil.copy2(f"listes/{list}.json", f"settings/Backup/{list}_backup.json")  # create a backup of the file
+        shutil.copy2(f"listes/{liste}.json", f"settings/Backup/{liste}_backup.json")  # create a backup of the file
 
-        content_list = self.read(list)
+        content_list = self.read(liste)
 
         if content_list["catégorie"] == "None":
             self.sendCreateTable.emit("")
@@ -289,7 +289,7 @@ class MainWindow(QObject):
             self.sendCreateTable.emit(content_list["catégorie"])
 
     @Slot()
-    def getBackup(self):
+    def get_backup(self):
         # restore the changes (when the user cancels or closes) by deleting the file and copying the backup file
 
         # Get the name of the list (settings/Backup/{list}_backup.json) in the backup folder
@@ -302,68 +302,67 @@ class MainWindow(QObject):
         shutil.copy2(f"settings/Backup/{old_list_name}_backup.json", f"listes/{old_list_name}.json")
 
     @Slot(str, int, int, str)
-    def updateWord(self, list, row, column, word):
+    def update_word(self, liste, row, column, word):
         # when a cell is modified the word is updated in the list file
 
-        content_list = self.read(list)
+        content_list = self.read(liste)
 
         content_list["liste"][row][column] = word
 
-        self.write(content_list, list)
+        self.write(content_list, liste)
 
     @Slot(str)
-    def newLine(self, list):
+    def new_line(self, liste):
         # When newLine button is pressed it destroy the table, and call this function
         # the function just create a new line in the list of words
         # and call the get words function to recreate the table but with the argument newLine set to True so it scroll
         # down to the newLine and it focus the first cell of that line
 
-        content_list = self.read(list)
+        content_list = self.read(liste)
 
         content_list["liste"].append(["", "", "", -1])
 
-        self.write(content_list, list)
+        self.write(content_list, liste)
 
-        self.getWords(list, newLine=True)
+        self.get_words(liste, newLine=True)
 
     sendNewLineOnEnter = Signal()
     @Slot()
-    def newLineOnEnter(self):
+    def new_line_on_enter(self):
         self.sendNewLineOnEnter.emit()
 
     getCurrentRow = Signal(str)
     @Slot(str, int)
-    def suppLine(self, list, selectedRow):
-        # delete the selectedRow in the list file
+    def del_line(self, liste, selected_row):
+        # delete the selected_row in the list file
         # When the user click on the supp button it destroy the table, call this function but this part of the qml
         # don't know which cell is selected so it call the function with the argument selected Row to -2
 
-        if selectedRow == -2:
-            # If selectedRow is equal to -2 it means that we don't know which cell is selected
+        if selected_row == -2:
+            # If selected_row is equal to -2 it means that we don't know which cell is selected
             # so we ask with the get CurrentRow Signal that will recall this function with the correct selected row
 
             self.getCurrentRow.emit("suppLine")
 
+        elif selected_row == -1:
+            # if no row is selected it selected_row is equal to -1 and we just recreate the table
 
-        elif selectedRow == -1:
-            # if no row is selected it selectedRow is equal to -1 and we just recreate the table
-
-            self.getWords(list)
+            self.get_words(liste)
 
         else:
             # if a row is selected it delete it
-            content_list = self.read(list)
+            content_list = self.read(liste)
 
-            del content_list["liste"][selectedRow]
+            del content_list["liste"][selected_row]
 
-            self.write(content_list, list)
+            self.write(content_list, liste)
 
             # and then recreate the table
-            self.getWords(list)
+            self.get_words(liste)
 
     checkedList = Signal(str)
     @Slot(str, str)
-    def checkList(self, liste, newlistename):
+    def check_list(self, liste, new_list_name):
         # when save button is pressed this function checks if all lines are filled (at least the 2 first cells),
         # check the list name and check for duplicate words or definitions
 
@@ -389,43 +388,43 @@ class MainWindow(QObject):
             return False
 
         # check if the file name is not empty
-        if newlistename == "":
+        if new_list_name == "":
             self.checkedList.emit("le nom de la liste ne peut pas être vide")
             return False
 
         # check if the file already exist
-        elif os.path.isfile("listes/" + newlistename + ".json") and liste != newlistename:
+        elif os.path.isfile("listes/" + new_list_name + ".json") and liste != new_list_name:
             self.checkedList.emit("le nom de la liste existe déjà")
             return False
 
         # if the name of the list is correct it renames it
-        os.rename("listes/" + liste + ".json", "listes/" + newlistename + ".json")
+        os.rename("listes/" + liste + ".json", "listes/" + new_list_name + ".json")
 
         self.checkedList.emit("ok")  # the file is complete (so it can go back to home page)
-        self.getListList()  # create the elements of the homepage
+        self.get_list_list()  # create the elements of the homepage
 
     @Slot(str, int)
-    def resetLv(self, liste, selectedRow):
+    def reset_lv(self, liste, selected_row):
         # when the reset level button is pressed we reset the level of the selected row
-        # Here it's the same trick than in suppLine function to get the selected row
+        # Here it's the same trick than in del_line function to get the selected row
 
-        if selectedRow == -2:
+        if selected_row == -2:
             self.getCurrentRow.emit("resetLv")
 
-        elif selectedRow == -1:
-            self.getWords(liste)
+        elif selected_row == -1:
+            self.get_words(liste)
 
         else:
             content_list = self.read(liste)
 
-            content_list["liste"][selectedRow][3] = -1
+            content_list["liste"][selected_row][3] = -1
 
             self.write(content_list, liste)
 
-            self.getWords(liste)
+            self.get_words(liste)
 
     @Slot(str, str)
-    def changeMode(self, liste, mode):
+    def change_mode(self, liste, mode):
         # change the mode of "liste" to "mode"
 
         content_list = self.read(liste)
@@ -435,7 +434,7 @@ class MainWindow(QObject):
         self.write(content_list, liste)
 
     @Slot(str, str)
-    def updateCategorie(self, liste, category):
+    def update_category(self, liste, category):
         # update the category of "liste" with the value "category" whenever the user changes it in modify page
         # if the category textInput is empty the value return in the list file is "None"
 
@@ -457,7 +456,7 @@ class MainWindow(QObject):
     # It was (int, int, "QVariant") but it was crashing from time to time so I put them all in a list
     sendListInfo = Signal("QVariant")
     @Slot(str)
-    def getListInfo(self, liste):
+    def get_list_info(self, liste):
         # Send list info: number of word in the list and general level of the list
         content_liste = self.read(liste)
 
@@ -473,7 +472,7 @@ class MainWindow(QObject):
 
     initializeRevision = Signal(list)   # [str, str, int] same problem as with get_list_info
     @Slot(str, str, str, str)
-    def startRevision(self, liste, liste_mode, revision_mode, revision_direction):
+    def start_revision(self, liste, revision_mode, revision_direction):
         # Initialize revision Page and history
         #
         # revision_mode: "write" or "QCM"
@@ -503,7 +502,7 @@ class MainWindow(QObject):
         # "hint" : ["word1", "word2", "word3_if_in_qcm_mode"], "current_direction" = "default"}
         index -= 1
 
-        next_word_info = {"displayWord": "", "toFindWord": "", "context": False, "hint": [], "current_direction": "" }
+        next_word_info = {"displayWord": "", "toFindWord": "", "context": False, "hint": [], "current_direction": ""}
 
         if revision_direction == "random":
             revision_direction = random.choice(["default", "opposite"])
@@ -672,10 +671,10 @@ if __name__ == "__main__":
     engine.load(os.path.join(os.path.dirname(__file__), "qml/main.qml"))
 
     # Initialize
-    main.themeList()
-    main.getTheme()
-    main.getCustomTopBar()
-    main.getListList()
+    main.theme_list()
+    main.get_theme()
+    main.get_custom_top_bar()
+    main.get_list_list()
 
     if not engine.rootObjects():
         sys.exit(-1)

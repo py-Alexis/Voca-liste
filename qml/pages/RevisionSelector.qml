@@ -45,7 +45,7 @@ Item {
             stackView.replace(Qt.resolvedUrl("../pages/HomePage.qml"))
             stackViewDirection = true
             currentList = ""
-            backend.getListList()
+            backend.get_list_list()
         }
     }
 
@@ -507,7 +507,7 @@ Item {
                     stackView.replace(Qt.resolvedUrl("../pages/HomePage.qml"))
                     stackViewDirection = true
                     currentList = ""
-                    backend.getListList()
+                    backend.get_list_list()
                 }
             }
             SaveBtn{
@@ -539,7 +539,7 @@ Item {
                     }
 
                     stackView.replace(Qt.resolvedUrl("../pages/RevisionPage.qml"))
-                    backend.startRevision(currentList, currentMode, mode, direction)
+                    backend.start_revision(currentList, mode, direction)
                 }
             }
         }

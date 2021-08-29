@@ -75,7 +75,7 @@ Item {
                 currentList = clikedListName
                 currentMode = clikedListMode
                 listIsSelected = true
-                backend.getWords(clikedListName)
+                backend.get_words(clikedListName)
 
             }
         }
@@ -95,7 +95,7 @@ Item {
             listIsSelected = false
             reloadList = reloadList + 1
             reloadList = reloadList - 1
-            backend.getListList()
+            backend.get_list_list()
         }
 
         function createGraph(){
@@ -162,7 +162,7 @@ Item {
 
                         onAccepted:{
                             console.log(newFolderInput.text)
-                            backend.checkName(newFolderInput.text)
+                            backend.check_name(newFolderInput.text)
                             newFolderInput.text = ""
                         }
                         onRejected:{
@@ -206,7 +206,7 @@ Item {
                         selectMultiple: true
                         nameFilters: ["fichier de liste (*.json)"]
                         onAccepted: {
-                            backend.importListe(fileImport.fileUrls)
+                            backend.import_liste(fileImport.fileUrls)
                             internal.reloadListList()
                         }
                     }
@@ -283,7 +283,7 @@ Item {
                     onClicked: {
                         if (currentListNbWord !== 0){
                             stackView.replace(Qt.resolvedUrl("../pages/RevisionSelector.qml"))
-                            backend.getListInfo(currentList)
+                            backend.get_list_info(currentList)
                         }else{
                             popUp.popUpText = "cette liste est vide"
                             showPopUp.running = true
@@ -321,7 +321,7 @@ Item {
                     btnTextColor: light_text_color
                     btnTextColorDown: medium_text_color
 
-                    onClicked: {modifierClicked = true; stackView.replace(Qt.resolvedUrl("../pages/Modify.qml")); backend.createTable(currentList)}
+                    onClicked: {modifierClicked = true; stackView.replace(Qt.resolvedUrl("../pages/Modify.qml")); backend.create_table(currentList)}
                 }
 
                 CustomTextButton{
@@ -347,7 +347,7 @@ Item {
                         icon: StandardIcon.Critical
 
                         onYes:{
-                            backend.supprimer(currentList)
+                            backend.del_file(currentList)
                             internal.reloadListList()
 
                         }
@@ -528,7 +528,7 @@ Item {
             if(currentList !== ""){
                 destroy_ = "qmlsdkfj"
                 destroy_ = currentList
-                backend.getWords(currentList)
+                backend.get_words(currentList)
             }
         }
 

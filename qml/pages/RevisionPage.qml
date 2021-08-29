@@ -170,7 +170,7 @@ Item {
                 stackViewDirection = true
                 currentList = ""
                 currentMode = ""
-                backend.getListList()
+                backend.get_list_list()
             }
 
         }

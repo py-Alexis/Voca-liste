@@ -62,7 +62,7 @@ Item{
 
                 onClicked: {
                     internal.destroyTable()
-                    backend.resetLv(currentList, -2)
+                    backend.reset_lv(currentList, -2)
                 }
             }
 
@@ -146,7 +146,7 @@ Item{
 
                 onClicked: {
                     internal.destroyTable()
-                    backend.newLine(currentList)
+                    backend.new_line(currentList)
                 }
             }
 
@@ -161,10 +161,10 @@ Item{
 
                 onClicked: {
                     internal.destroyTable()
-                    backend.suppLine(currentList, -2)
+                    backend.del_line(currentList, -2)
 
                     internal.destroyTable()
-                    backend.getWords(currentList)
+                    backend.get_words(currentList)
                 }
             }
 
@@ -221,7 +221,7 @@ Item{
                     }
 
                     onClicked: {
-                        backend.changeMode(currentList, text)
+                        backend.change_mode(currentList, text)
                         currentMode = text
                     }
                 }
@@ -244,7 +244,7 @@ Item{
                     }
 
                     onClicked: {
-                        backend.changeMode(currentList, text)
+                        backend.change_mode(currentList, text)
                         currentMode = text
                     }
                 }
@@ -290,7 +290,7 @@ Item{
                     selectedTextColor: "#000000"
                     selectionColor: accent_color
 
-                    onTextEdited: backend.updateCategorie(currentList, text)
+                    onTextEdited: backend.update_category(currentList, text)
                 }
             }
 
@@ -414,7 +414,7 @@ Item{
             btnTextColor: light_text_color
             btnColor: accent_color
 
-            onClicked: {backend.checkList(currentList, currentListLabel.text)}
+            onClicked: {backend.check_list(currentList, currentListLabel.text)}
 
             MessageDialog{
                 id: saveDialog
@@ -452,13 +452,13 @@ Item{
                 icon: StandardIcon.Critical
 
                 onYes:{
-                    backend.getBackup()
+                    backend.get_backup()
                     stackViewDirection = false
                     stackView.replace(Qt.resolvedUrl("../pages/HomePage.qml"))
                     stackViewDirection = true
                     currentList = ""
                     currentMode = ""
-                    backend.getListList()
+                    backend.get_list_list()
                 }
 
             }
@@ -474,7 +474,7 @@ Item{
 
                 icon: StandardIcon.Critical
                 onYes:{
-                    backend.getBackup()
+                    backend.get_backup()
                     backend.close()
                 }
             }
@@ -491,7 +491,7 @@ Item{
             }
             internal.destroyTable()
             categorieSelector.text = categorie
-            backend.getWords(currentList)
+            backend.get_words(currentList)
         }
 
         function onSendNewFile(){
@@ -528,7 +528,7 @@ Item{
 
         function onSendNewLineOnEnter(){
             internal.destroyTable()
-            backend.newLine(currentList)
+            backend.new_line(currentList)
         }
     }
 
