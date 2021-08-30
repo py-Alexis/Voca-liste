@@ -161,7 +161,6 @@ Item {
                         }
 
                         onAccepted:{
-                            console.log(newFolderInput.text)
                             backend.check_name(newFolderInput.text)
                             newFolderInput.text = ""
                         }

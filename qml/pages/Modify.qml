@@ -495,7 +495,6 @@ Item{
         }
 
         function onSendNewFile(){
-            console.log("-----------------------")
             if (currentListLabel.text === ""){
                 currentListLabel.text = currentList
             }

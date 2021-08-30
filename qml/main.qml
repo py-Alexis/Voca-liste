@@ -667,7 +667,7 @@ Window {
     Connections{
         target: backend
         // Custom Top Bar
-        function onIntializeCustomTopBar(statut){
+        function onInitializeCustomTopBar(statut){
             isActiveTopBar = statut
             internal.toggleTopBar()
 

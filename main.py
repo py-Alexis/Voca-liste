@@ -169,13 +169,13 @@ class MainWindow(QObject):
 
         self.get_theme()
 
-    intializeCustomTopBar = Signal(bool)
+    initializeCustomTopBar = Signal(bool)
     def get_custom_top_bar(self):
         # send to main.qml file the status of the custom top bar so that it stays the same when you close the app
 
         content_settings = self.read(path=settings_path)
 
-        self.intializeCustomTopBar.emit(content_settings["Custom Top Bar"])
+        self.initializeCustomTopBar.emit(content_settings["Custom Top Bar"])
 
     sendCustomTopBar = Signal(bool)
     @Slot(bool)
@@ -245,18 +245,14 @@ class MainWindow(QObject):
             self.sendCheckedName.emit("existe déjà")
             return False
 
-        try:
-            content_list = self.read(path="settings/template_list.json")
+        content_list = self.read(path="settings/template_list.json")
 
-            self.write(content_list, name)
+        self.write(content_list, name)
 
-            self.sendCheckedName.emit(name)
-            self.sendNewFile.emit()
-            return True
+        self.create_backup(name)
 
-        except:  # It's  not good to do a such large except but it shouldn't be necessary anyway so I just keep it like that
-            self.sendCheckedName.emit("erreur")
-            return False
+        self.sendCheckedName.emit(name)
+        self.sendNewFile.emit()
 
     @Slot(str)
     def del_file(self, liste_name):
@@ -268,10 +264,7 @@ class MainWindow(QObject):
     # --------------  Modify  -------------
     # -------------------------------------
 
-    sendCreateTable = Signal(str)
-    @Slot(str)
-    def create_table(self, liste):
-        # backup the file so we can cancel the modification and send the category of the list
+    def create_backup(self, liste_name):
 
         # delete files in backup folder
         if len(os.listdir('Settings/Backup')) != 0:
@@ -279,7 +272,14 @@ class MainWindow(QObject):
             for f in files:
                 os.remove(f)
 
-        shutil.copy2(f"listes/{liste}.json", f"settings/Backup/{liste}_backup.json")  # create a backup of the file
+        # create a backup of the file
+        shutil.copy2(f"listes/{liste_name}.json", f"settings/Backup/{liste_name}_backup.json")
+
+    sendCreateTable = Signal(str)
+    @Slot(str)
+    def create_table(self, liste):
+        # backup the file so we can cancel the modification and send the category of the list
+        self.create_backup(liste)
 
         content_list = self.read(liste)
 
@@ -324,7 +324,7 @@ class MainWindow(QObject):
 
         self.write(content_list, liste)
 
-        self.get_words(liste, newLine=True)
+        self.get_words(liste, new_line=True)
 
     sendNewLineOnEnter = Signal()
     @Slot()
@@ -471,7 +471,7 @@ class MainWindow(QObject):
     # -------------------------------------
 
     initializeRevision = Signal(list)   # [str, str, int] same problem as with get_list_info
-    @Slot(str, str, str, str)
+    @Slot(str, str, str)
     def start_revision(self, liste, revision_mode, revision_direction):
         # Initialize revision Page and history
         #
