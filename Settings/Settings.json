@@ -5,5 +5,5 @@
         "dark"
     ],
     "Custom Top Bar": true,
-    "StackView animation": false
+    "StackView animation": true
 }

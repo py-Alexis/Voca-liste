@@ -6,13 +6,13 @@ import "../../"
 import "../../controls/Revision"
 import "../../controls/modify"
 import "../"
-import QtQuick.Timeline 1.0
 
 Item{
     id: qcm
 
     property bool clickable: true
     property bool result: true
+    property string toFind: ""
 
      Rectangle{
          id: displayWordWrite
@@ -225,7 +225,6 @@ Item{
          Keys.onEnterPressed: nextBtn.activate() // Numpad enter key
 
          function activate() {
-             console.debug("oui")
              if(index != nbWord){
                  backend.call_next_word()
              }else{
@@ -250,6 +249,10 @@ Item{
                  displayWordLabel.text = info["displayWord"]
              }
 
+             if(toFind === ""){
+                 toFind = info["toFindWord"]
+             }
+
              if(displayContextLabel.text === ""){
                  displayContextLabel.text = info["context"]
              }
@@ -260,7 +263,7 @@ Item{
              writeAnswer.focus = true
          }
 
-         function onSend_checked_answer(AnswerResult, goodAnswer){
+         function onSend_checked_answer(AnswerResult){
              result = AnswerResult
              clickable = false
              nextBtn.focus = true
@@ -270,10 +273,10 @@ Item{
              }
 
              if(result){
-                 writeAnswer.text = goodAnswer
+                 writeAnswer.text = toFind
              }else{
                  writeAnswer.font.strikeout = true
-                 goodAnswerTextField.text = goodAnswer
+                 goodAnswerTextField.text = toFind
                  goodAnswerAnimation.running = true
                  wrongAnswerAnimation.running = true
 

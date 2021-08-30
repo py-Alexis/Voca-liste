@@ -560,7 +560,7 @@ class MainWindow(QObject):
     def call_next_word(self):
         self.send_call_next_word.emit()
 
-    send_checked_answer = Signal(bool, str)     # result (bool), goodAnswer
+    send_checked_answer = Signal(bool)
     @Slot(str, int, str)
     def check_answer_write(self, answer, index, direction):
         # check if the answer the user type is correct (not taking into consideration the brackets etc.)
@@ -591,7 +591,7 @@ class MainWindow(QObject):
             elif word_list[real_index][3] == -1:
                 word_list[real_index][3] = 0
 
-        self.send_checked_answer.emit(result, word_list_shuffle[index - 1][0])
+        self.send_checked_answer.emit(result)
 
     @Slot(int)
     def was_right(self, index):

@@ -5,27 +5,27 @@
     "liste": [
         [
             "peut-être",
-            "maybe",
+            "maybe / perhaps",
             "ici aussi",
-            2
+            5
         ],
         [
             "non",
             "no",
             "",
-            3
+            6
         ],
         [
             "oui",
             "yes",
             "donc ici il y a un context",
-            2
+            5
         ],
         [
             "bientôt",
             "soon",
             "",
-            3
+            6
         ]
     ],
     "historique": [
@@ -106,6 +106,33 @@
             11,
             "QCM",
             "opposite"
+        ],
+        [
+            1630349448.6782215,
+            "Mon Aug 30 20:50:48 2021",
+            58.3,
+            [],
+            14,
+            "write",
+            "opposite"
+        ],
+        [
+            1630349467.224051,
+            "Mon Aug 30 20:51:07 2021",
+            75.0,
+            [],
+            25,
+            "write",
+            "opposite"
+        ],
+        [
+            1630349537.9632535,
+            "Mon Aug 30 20:52:17 2021",
+            91.7,
+            [],
+            15,
+            "write",
+            "random"
         ]
     ]
 }
