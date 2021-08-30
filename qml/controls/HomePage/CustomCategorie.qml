@@ -12,7 +12,7 @@ Rectangle {
 
     id: settingsInterfaceGraphique
     color: backgroundColor
-    width: 40
+    width: 5
     height: settingsGraphiqueLabel.height + 20
 
     Rectangle{

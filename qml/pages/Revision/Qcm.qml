@@ -61,6 +61,7 @@ Item{
          height: 0
 
          color: darker_color
+         opacity: 0.75
          anchors.left: parent.left
          anchors.right: parent.right
          anchors.bottom: columnBtn.top
@@ -68,19 +69,20 @@ Item{
          anchors.rightMargin: 0
          anchors.leftMargin: 0
          clip: true
+         radius: 5
 
          Label{
              id: displayContextLabel
 
-             anchors.verticalCenter: parent.verticalCenter
-             anchors.horizontalCenter: parent.horizontalCenter
-
              text: ""
+             anchors.fill: parent
 
-             color: medium_text_color
-
+             horizontalAlignment: Text.AlignHCenter
+             verticalAlignment: Text.AlignVCenter
+             wrapMode: Text.Wrap
              font.pointSize: 13
 
+             color: medium_text_color
          }
          PropertyAnimation{
              id: animationContext

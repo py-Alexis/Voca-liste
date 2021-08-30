@@ -12,7 +12,7 @@ def api_list_possible(answer):
 
     for split_answer in answer.split("/"):
 
-        for element in ["", "the ", "le ", "la ", "du ", "de ", "les ", "l'", "d'"]:
+        for element in ["", "the ", "le ", "la ", "du ", "de ", "les ", "l'", "d'", "un", "une"]:
 
             if element in split_answer:
                 possible_good_answer = re.sub(element, "", split_answer)

@@ -45,7 +45,7 @@ Item{
          id: displayContextWrite
 
          height: 0
-
+         opacity: 0.75
          color: darker_color
          anchors.left: parent.left
          anchors.right: parent.right
@@ -54,14 +54,16 @@ Item{
          anchors.rightMargin: 0
          anchors.leftMargin: 0
          clip: true
+         radius: 5
 
          Label{
              id: displayContextLabel
 
-             anchors.verticalCenter: parent.verticalCenter
-             anchors.horizontalCenter: parent.horizontalCenter
 
              text: ""
+             anchors.fill: parent
+             horizontalAlignment: Text.AlignHCenter
+             verticalAlignment: Text.AlignVCenter
 
              color: medium_text_color
 
