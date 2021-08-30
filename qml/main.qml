@@ -121,7 +121,6 @@ Window {
         and if it's ok the page do backend.close() that emit a sendClose signal that close the page */
     }
 
-
     Rectangle {
         z: 0
         id: bg
@@ -498,27 +497,45 @@ Window {
             anchors.leftMargin: 0
             anchors.bottomMargin: 0
 
-            Label {
-                id: labelBottomInfo
-                color: medium_text_color
-                text: qsTr("Version d'essai par py-Alexis")
+            Button{
+                id: githubBtn
                 anchors.left: parent.left
-                anchors.right: parent.right
                 anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                verticalAlignment: Text.AlignVCenter
-                antialiasing: false
+                anchors.topMargin: (25 - height)/2
                 anchors.leftMargin: 10
-                anchors.rightMargin: 100
-                anchors.bottomMargin: 0
-                anchors.topMargin: 0
+                height: 11
+                width: (512 * height) / 139
+                opacity: if(hovered){0.7}else{1}
+
+                onClicked: backend.open_github()
+
+                background: Rectangle{
+                    color: "transparent"
+                    anchors.fill: parent
+
+                    Image{
+                        id: gitHubLogo
+
+                        anchors.fill: parent
+
+                        source: "../images/github.svg"
+
+                        visible: true
+                    }
+
+                    ColorOverlay{
+                        anchors.fill: parent
+                        source: gitHubLogo
+                        color: medium_text_color
+                    }
+                }
             }
 
             Label {
                 id: bottomRightInfo1
                 color: medium_text_color
                 text: qsTr("| Beta 1.1")
-                anchors.left: labelBottomInfo.right
+                anchors.left: parent.right
                 anchors.right: parent.right
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
@@ -526,7 +543,7 @@ Window {
                 verticalAlignment: Text.AlignVCenter
                 antialiasing: false
                 anchors.rightMargin: 5
-                anchors.leftMargin: 0
+                anchors.leftMargin: 100
                 anchors.bottomMargin: 0
                 anchors.topMargin: 0
             }

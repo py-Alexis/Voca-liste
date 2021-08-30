@@ -7,6 +7,7 @@ import random
 import shutil
 import sys
 import time
+import webbrowser
 
 from api import api_list_possible
 
@@ -202,6 +203,10 @@ class MainWindow(QObject):
         content_settings = self.read(path=settings_path)
         content_settings["StackView animation"] = state
         self.write(content_settings, path=settings_path)
+
+    @Slot()
+    def open_github(self):
+        webbrowser.open('https://github.com/py-Alexis/voca-liste', new=2)
 
     # -------------------------------------
     # --------------HOME PAGE--------------
