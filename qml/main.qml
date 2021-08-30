@@ -11,6 +11,7 @@ Window {
     property string currentList: ""
     property string currentMode: ""
     property bool stackViewDirection: true // true = left to right ; false = right to left; set to false before changing the page and reset it to true (onFinished don't work with these animation)
+    property bool stackViewAnimation: true // true = duration: 850; false = duration: 0
 
     // PROPERTY FOR CUSTOM TOP BAR
     property bool isActiveTopBar: false
@@ -328,7 +329,7 @@ Window {
                 id: animationSettingsPannel
                 target: settingsLeftPanel
                 property: "width"
-                to: if(settingsLeftPanel.width == 0) return 250; else return 0
+                to: if(settingsLeftPanel.width == 0) return 260; else return 0
                 duration: 750
                 easing.type: Easing.InOutQuint
             }
@@ -376,7 +377,7 @@ Window {
 
                         text: "Afficher la barre de titre \npersonnalisé"
                         anchors.left: parent.left
-                        anchors.leftMargin: 40
+                        anchors.leftMargin: 30
 
                         topPadding: 15
 
@@ -404,13 +405,43 @@ Window {
                         id: themeSelector
 
                         anchors.left: parent.left
-                        anchors.leftMargin: 40
+                        anchors.leftMargin: 30
 
                         background: Rectangle {
                             color: medium_text_color // Couleur de la séparation
                         }
                         TabButton {
                             id: temporaryButton
+                        }
+                    }
+
+                    Item{
+                        height: 15
+                        width: 1
+                    }
+
+                    CustomSwitch {
+                        id: settingsToggleStackViewAnimation
+
+                        text: "activer/desactiver les animations \nde changement de page"
+                        anchors.left: parent.left
+                        anchors.leftMargin: 30
+
+                        topPadding: 15
+
+                        size: 0.8
+                        textPadding: 10
+                        textColor: medium_text_color
+                        backgroundChecked: accent_color
+                        backgroundUnChecked: light_color
+                        circleDown: medium_color
+                        circleUnChecked: accent_color
+                        circleChecked: light_color
+
+
+                        onClicked: {
+                            stackViewAnimation = !stackViewAnimation
+                            backend.toggle_stack_view_animation(stackViewAnimation)
                         }
                     }
                 }
@@ -436,7 +467,7 @@ Window {
                 XAnimator {
                     from: if(stackViewDirection){stackView.width}else{-stackView.width}
                     to: 0
-                    duration: 850
+                    duration: if(stackViewAnimation){850}else{0}
                     easing.type: Easing.InOutQuint
                 }
             }
@@ -445,7 +476,7 @@ Window {
                 XAnimator {
                     from: 0
                     to: if(stackViewDirection){-stackView.width}else{stackView.width}
-                    duration: 850
+                    duration: if(stackViewAnimation){850}else{0}
                     easing.type: Easing.InOutQuint
                 }
             }
@@ -673,6 +704,14 @@ Window {
 
             if(statut === false){
                 settingsToggleTopBar.checked = true
+            }
+        }
+
+        function onInitializeStackViewAnimation(state){
+            stackViewAnimation = state
+
+            if(state === false){
+                settingsToggleStackViewAnimation.checked = true
             }
         }
 

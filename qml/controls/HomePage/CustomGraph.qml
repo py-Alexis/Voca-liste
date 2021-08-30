@@ -4,7 +4,6 @@ import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.15
 import QtQuick.Shapes 1.15
 import "../../../qml"
-import "../HomePage"
 
 Item {
     id: bg
@@ -190,8 +189,8 @@ Item {
             id: popupHistory
 
             color: darker_color
-            height: 190
-            width: 180
+            height: 150
+            width: 165
             visible: false
             opacity: .93
             radius: 10

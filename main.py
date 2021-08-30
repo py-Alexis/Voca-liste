@@ -174,7 +174,6 @@ class MainWindow(QObject):
         # send to main.qml file the status of the custom top bar so that it stays the same when you close the app
 
         content_settings = self.read(path=settings_path)
-
         self.initializeCustomTopBar.emit(content_settings["Custom Top Bar"])
 
     sendCustomTopBar = Signal(bool)
@@ -188,6 +187,21 @@ class MainWindow(QObject):
         self.write(content_settings, path=settings_path)
 
         self.sendCustomTopBar.emit(not state)
+
+    initializeStackViewAnimation = Signal(bool)
+    def get_stack_view_animation(self):
+        # send to main.qml file the status of the stack view animation so that it stays the same when you close the app
+
+        content_settings = self.read(path=settings_path)
+        self.initializeStackViewAnimation.emit(content_settings["StackView animation"])
+
+    @Slot(bool)
+    def toggle_stack_view_animation(self, state):
+        # Change the status of the stack view animation so that the app remembers it when you close it
+
+        content_settings = self.read(path=settings_path)
+        content_settings["StackView animation"] = state
+        self.write(content_settings, path=settings_path)
 
     # -------------------------------------
     # --------------HOME PAGE--------------
@@ -674,6 +688,7 @@ if __name__ == "__main__":
     main.theme_list()
     main.get_theme()
     main.get_custom_top_bar()
+    main.get_stack_view_animation()
     main.get_list_list()
 
     if not engine.rootObjects():
