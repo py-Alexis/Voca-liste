@@ -4,7 +4,7 @@ import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.15
 import "../../"
 import "../../controls/Revision"
-import "../../controls/modify"
+import "../../controls"
 import "../"
 
 Item{

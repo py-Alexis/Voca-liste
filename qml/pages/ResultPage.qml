@@ -17,7 +17,7 @@ Item {
         id: internal
 
         function createGraph(){
-            var objectString = "import QtQuick 2.15; import '../pages'; import '../controls/HomePage'; CustomGraph{reload: destroy_; z:100; visible: true; id: customGraph; anchors.fill: graph}"
+            var objectString = "import QtQuick 2.15; import '../pages'; import '../controls'; CustomGraph{reload: destroy_; z:100; visible: true; id: customGraph; anchors.fill: graph}"
             var newObject =  Qt.createQmlObject(objectString, graph,"graph")
         }
     }

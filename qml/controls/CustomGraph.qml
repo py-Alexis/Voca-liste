@@ -3,7 +3,7 @@ import QtQuick.Window 2.15
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.15
 import QtQuick.Shapes 1.15
-import "../../../qml"
+import "../../qml"
 
 Item {
     id: bg
@@ -83,21 +83,21 @@ Item {
                 var y_factor = (100 - lv)/ 100
 
                 // create the circles
-                var circleString = `import QtQuick 2.15; import "../HomePage";import "../../../qml"; Rectangle{id: circle; property bool animationRunning: startAnimation; property bool animationFinished: false; onAnimationRunningChanged: circleAnimation.running = true; height: ${circleDiameter}; width: height; radius: height / 2; x: (graph.width * ${x_factor}) - 6; y: if(animationFinished){(graph.height) * ${y_factor} - 6}else{graph.height} color: accent_color; PropertyAnimation { id: circleAnimation; target: circle; property: "y"; to: (graph.height) * ${y_factor} - 6; duration: 750; easing.type: Easing.InOutQuint; onFinished: {animationFinished = true; startAnimation2 = true}}}`
+                var circleString = `import QtQuick 2.15; import "../controls";import "../../qml"; Rectangle{id: circle; property bool animationRunning: startAnimation; property bool animationFinished: false; onAnimationRunningChanged: circleAnimation.running = true; height: ${circleDiameter}; width: height; radius: height / 2; x: (graph.width * ${x_factor}) - 6; y: if(animationFinished){(graph.height) * ${y_factor} - 6}else{graph.height} color: accent_color; PropertyAnimation { id: circleAnimation; target: circle; property: "y"; to: (graph.height) * ${y_factor} - 6; duration: 750; easing.type: Easing.InOutQuint; onFinished: {animationFinished = true; startAnimation2 = true}}}`
                 var circleObject =  Qt.createQmlObject(circleString, graph,"circle")
 
                 // add this point to the path
                 path += `PathCurve { x: (graph.width * ${x_factor})+45; y: (graph.height * ${y_factor})+graph.anchors.bottomMargin }`
 
                 // create button that handle mouse hover
-                var hoverString = `import QtQuick 2.15;import QtQuick.Controls 2.2; import "../HomePage"; import "../../../qml"; Button{width: graph.width * ${offset * 2};anchors.top: parent.top;anchors.bottom: parent.bottom;anchors.topMargin: 0;anchors.bottomMargin: 0;background: Rectangle{color: 'transparent';}onHoveredChanged:{if(hovered){indexHover = ${index}}else{indexHover = -1}}}`
+                var hoverString = `import QtQuick 2.15;import QtQuick.Controls 2.2; import "../controls"; import "../../qml"; Button{width: graph.width * ${offset * 2};anchors.top: parent.top;anchors.bottom: parent.bottom;anchors.topMargin: 0;anchors.bottomMargin: 0;background: Rectangle{color: 'transparent';}onHoveredChanged:{if(hovered){indexHover = ${index}}else{indexHover = -1}}}`
                 var newHoverObject=  Qt.createQmlObject(hoverString,graphRow,"hover")
 
             }
 
             // create the path
             path += "}"
-            var line = `import QtQuick 2.15; import "../../../qml"; Canvas {property bool animationRunning: startAnimation2;clip: false; onAnimationRunningChanged:animation2.running = true; id: canva; anchors.fill: parent ; contextType: "2d" ; ${path} onPaint: { context.strokeStyle = accent_color; context.path = myPath; context.lineWidth = 3; context.lineCap = "round"; context.stroke()}opacity:0; PropertyAnimation { id: animation2; target: canva; property: "opacity"; to: 1; duration: 500; easing.type: Easing.InOutQuint}}`
+            var line = `import QtQuick 2.15; import "../../qml"; Canvas {property bool animationRunning: startAnimation2;clip: false; onAnimationRunningChanged:animation2.running = true; id: canva; anchors.fill: parent ; contextType: "2d" ; ${path} onPaint: { context.strokeStyle = accent_color; context.path = myPath; context.lineWidth = 3; context.lineCap = "round"; context.stroke()}opacity:0; PropertyAnimation { id: animation2; target: canva; property: "opacity"; to: 1; duration: 500; easing.type: Easing.InOutQuint}}`
             var newObjectLine = Qt.createQmlObject(line, graphContainer,"graphLine")
 
             startAnimation = true
