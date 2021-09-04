@@ -30,7 +30,6 @@ def api_list_possible(answer):
 
     return possible_answers
 
-
 def remove_space(word):
     print(word)
     # return [word, word without spaces at the end and at the begging, and word without all spaces]

@@ -9,7 +9,7 @@ import sys
 import time
 import webbrowser
 
-from api import api_list_possible
+from api.api import api_list_possible
 
 from PySide2.QtCore import QObject, Slot, Signal
 from PySide2.QtGui import QGuiApplication, QIcon
