@@ -102,7 +102,7 @@ Item{
          }
 
          onAccepted: {
-             backend.check_answer_write(writeAnswer.text, index, currentDirection)
+             if(writeAnswer.text !== ""){backend.check_answer_write(writeAnswer.text, index, currentDirection)}
          }
          PropertyAnimation {
              id: wrongAnswerAnimation
@@ -173,7 +173,7 @@ Item{
 
          visible: clickable
 
-         onClicked: backend.check_answer_write(writeAnswer.text, index, currentDirection)
+         onClicked: if(writeAnswer.text !== ""){backend.check_answer_write(writeAnswer.text, index, currentDirection)}
      }
 
      SaveBtn{

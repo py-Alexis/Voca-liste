@@ -23,6 +23,7 @@ word_list = []
 word_list_shuffle = []
 history = []
 time_start = 0
+last_word_info = [-1, -1]   # [lv, index]
 
 
 class MainWindow(QObject):
@@ -118,7 +119,8 @@ class MainWindow(QObject):
             mistakes = ""
             for mistake in element[3]:
                 mistakes += mistake[0]
-                mistakes += " "
+                mistakes += " - "
+            mistakes = mistakes[:-3]
 
             formatted_history[index].append(mistakes)
             formatted_history[index].append(element[2])
@@ -578,13 +580,20 @@ class MainWindow(QObject):
         good_answer = word_list_shuffle[index - 1][direction]
         possible_answer = api_list_possible(good_answer)
 
+        # stores the level of the word
+        global last_word_info
+        last_word_info[0] = word_list[real_index][3]
+        last_word_info[1] = real_index
+
         # Good answer
         if answer.strip() in possible_answer:
             result = True
             if word_list[real_index][3] == -1:
-                word_list[real_index][3] = 1
-            elif 0 <= word_list[real_index][3] < 6:
-                word_list[real_index][3] += 1
+                word_list[real_index][3] = 2
+            elif 0 <= word_list[real_index][3] < 5:
+                word_list[real_index][3] += 2
+            elif word_list[real_index][3] == 5:
+                word_list[real_index][3] = 6
 
         # Wrong answer
         else:
@@ -603,23 +612,16 @@ class MainWindow(QObject):
         # triggers when I was right btn is clicked
         # update the word level
 
-        original_list = list(word_list_shuffle[index - 1])
-
-        if 1 <= original_list[3]:
-            original_list[3] -= 1
-        elif original_list[3] == -1:
-            original_list[3] = 0
-
-        real_index = word_list.index(original_list)
+        global last_word_info
 
         del history[-1][-1]
 
-        if word_list_shuffle[index - 1][3] == -1:
-            word_list[real_index][3] = 1
-        elif 0 <= word_list_shuffle[index - 1][3] < 6:
-            word_list[real_index][3] = word_list_shuffle[index - 1][3] + 1
-        else:
-            word_list[real_index][3] = 6
+        if last_word_info[0] == -1:
+            word_list[last_word_info[1]][3] = 2
+        elif last_word_info[0] < 5:
+            word_list[last_word_info[1]][3] = last_word_info[0] + 2
+        elif last_word_info[0] == 5:
+            word_list[last_word_info[1]][3] = 6
 
     @Slot(str, str, int)
     def add_history(self, word_clicked, to_find, index):
@@ -664,7 +666,8 @@ class MainWindow(QObject):
         if len(history[3]) != 0:
             for element in history[3]:
                 mistake += element[0]
-                mistake += " "
+                mistake += " - "
+            mistake = mistake[:-3]
 
         self.intializeResult.emit([revision_mode, revision_direction, result, f"{history[2]}%", str(time_spend), mistake])
         self.sendHistory.emit(self.get_history(liste))

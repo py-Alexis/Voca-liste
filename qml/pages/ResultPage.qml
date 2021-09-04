@@ -89,6 +89,7 @@ Item {
         anchors.leftMargin: 20
         anchors.bottomMargin: 50
         anchors.topMargin: 20
+        z: 1
 
         Column{
             id: column
