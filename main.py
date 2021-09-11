@@ -9,7 +9,7 @@ import sys
 import time
 import webbrowser
 
-from api.api import api_list_possible
+from api.api import api_list_possible, revise_last, revise_part_of_list
 
 from PySide2.QtCore import QObject, Slot, Signal
 from PySide2.QtGui import QGuiApplication, QIcon
@@ -114,7 +114,10 @@ class MainWindow(QObject):
 
             formatted_history[index].append(f"{format(int(element[4] // 60), '02d')}:{format(int(element[4] % 60), '02d')}")
 
-            formatted_history[index].append(len(element[3]))
+            if type(element[-1]) == list:
+                formatted_history[index].append(f"{len(element[-1]) - len(element[3])} / {len(element[-1])}")
+            else:
+                formatted_history[index].append(f"{len(content_liste['liste']) - len(element[3])} / {len(content_liste['liste'])}")
 
             mistakes = ""
             for mistake in element[3]:
@@ -492,26 +495,37 @@ class MainWindow(QObject):
     # -------------------------------------
 
     initializeRevision = Signal(list)   # [str, str, int] same problem as with get_list_info
-    @Slot(str, str, str)
-    def start_revision(self, liste, revision_mode, revision_direction):
+    @Slot(str, str, str, str)
+    def start_revision(self, liste, revision_mode, revision_direction, scope):
         # Initialize revision Page and history
         #
         # revision_mode: "write" or "QCM"
         # revision_direction: "default" (definition => mot); "opposite" (mot => definition); "random"
+        # scope: "all"; "last"; "int"
 
         global time_start
         time_start = datetime.datetime.now()
 
         global word_list
         global word_list_shuffle
-        word_list = self.read(liste)["liste"]
-        word_list_shuffle = self.read(liste)["liste"]
+        word_list = self.read(liste)
+        if scope == "all":
+            word_list_shuffle = word_list["liste"].copy()
+        elif scope == "last":
+            word_list_shuffle = revise_last(word_list["historique"], word_list["liste"])
+        else:
+            word_list_shuffle = revise_part_of_list(word_list["liste"], int(scope))
+
+        word_list = word_list["liste"]
         random.shuffle(word_list_shuffle)
 
         global history
         history = [time.time(), time.ctime(), -1, []]
 
-        self.initializeRevision.emit([revision_mode, revision_direction, len(word_list)])
+        print(word_list)
+        print(word_list_shuffle)
+
+        self.initializeRevision.emit([revision_mode, revision_direction, len(word_list_shuffle)])
 
         self.next_word(revision_mode, revision_direction, 1)
 
@@ -657,11 +671,13 @@ class MainWindow(QObject):
         history.append(int(time_spend.total_seconds()))
         history.append(revision_mode)
         history.append(revision_direction)
-        content_liste["historique"].append(history)
+        history.append(word_list_shuffle)
+        if len(word_list_shuffle) != len(word_list):
+            content_liste["historique"].append(history)
         self.write(content_liste, liste)
 
         # initialize resultPage
-        result = f"{len(word_list) - len(history[3])} / {len(word_list)}"
+        result = f"{len(word_list_shuffle) - len(history[3])} / {len(word_list_shuffle)}"
         mistake = ""
         if len(history[3]) != 0:
             for element in history[3]:

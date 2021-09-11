@@ -15,7 +15,7 @@ Rectangle {
     property string date: "date \nmqsldfkj"
     property string time: "time"
     property string lv: "lv => lv"
-    property int nbMistakes: 0
+    property string score: "10/11"
     property string mistakes: "mistkes qmdlkj fqmdslfjk mqdlsjk fmqldsj fmlsqd jfmlqsdj fmlqdsjf mlqdsj fmlqdf jmlqdjf mqlsdfj mqsldfj kmlsfjk lmqjfmqljf mlqsd fmqsldf jqmld jmqldsf mqlsdjf mqldfj mqdflj"
     property string mode: "QCM"
     property string direction: "default"
@@ -108,7 +108,7 @@ Rectangle {
 
         Label{
             id: nbMistakeLabelHistory
-            text: nbMistakes
+            text: score
             color: textColor
 
             anchors.verticalCenter: parent.verticalCenter

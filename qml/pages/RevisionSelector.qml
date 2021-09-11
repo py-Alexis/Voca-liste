@@ -19,8 +19,8 @@ Item {
         function createHistory(history){
             var paire = true
             for (const index in history){
-                    var newObject = Qt.createQmlObject(`import QtQuick 2.0; import "../controls/RevisionSelector"; import "../../qml"; HistoryLine{parentWidth: historyScrollView.width;pair: ${paire}; date: "${history[index][0]}";mode: "${history[index][6]}"; direction: "${history[index][7]}"; lv: "${history[index][1]}"; time: "${history[index][2]}"; nbMistakes: ${history[index][3]}; mistakes: "${history[index][4]}"; backgroundColorIsPair: medium_color; backgroundColorNotPair: light_color; textColor: light_text_color}`,historyColumn,"revisionSelector")
-                    paire = !paire
+                var newObject = Qt.createQmlObject(`import QtQuick 2.0; import "../controls/RevisionSelector"; import "../../qml"; HistoryLine{parentWidth: historyScrollView.width;pair: ${paire}; date: "${history[index][0]}";mode: "${history[index][6]}"; direction: "${history[index][7]}"; lv: "${history[index][1]}"; time: "${history[index][2]}"; score: "${history[index][3]}"; mistakes: "${history[index][4]}"; backgroundColorIsPair: medium_color; backgroundColorNotPair: light_color; textColor: light_text_color}`,historyColumn,"revisionSelector")
+                paire = !paire
             }
         }
     }
@@ -119,7 +119,7 @@ Item {
             anchors.top: listInfo.bottom
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.topMargin: 50
-            spacing: 50
+            //spacing: 50
 
             Column{
                 id: modeSelectorColumn
@@ -190,6 +190,8 @@ Item {
                     }
                 }
             }
+
+            Item{height: 1; width: 50}
 
             Column{
                 id: directionSelectorColumn
@@ -289,6 +291,128 @@ Item {
                 }
             }
 
+            Item{height: 1; width: 50}
+
+            Column{
+                id: nbWordSelectorColumn
+
+                spacing: 5
+                Label{
+                    id: nbWordSelectorLabel
+                    text: "nombre de mots:"
+                    anchors.left: parent.left
+                    anchors.leftMargin: 0
+                    color: light_text_color
+                    font.pointSize: 9
+                }
+
+                TabBar{
+                    id: nbWordSelector
+
+                    background: Rectangle{
+                        color: "#00000000" // couleur de la séparation
+                    }
+
+                    TabButton{
+                        id: allListBtn
+
+                        text: "Toute la liste"
+                        width: implicitWidth
+
+                        contentItem: Text{
+                            color: parent.checked ? light_text_color: medium_text_color
+                            text: parent.text
+                            font: parent.font
+                        }
+
+                        background: Rectangle{
+                            color: parent.checked ? accent_color: medium_color
+                            opacity: parent.down ? 0.75: 1
+                            radius: 3
+                        }
+
+                        onClicked: {
+                        }
+
+                    }TabButton{
+                        id: lastTimeBtn
+                        text: "Mêmes mots que la dernière fois"
+                        width: implicitWidth
+
+                        contentItem: Text{
+                            color: parent.checked ? light_text_color: medium_text_color
+                            text: parent.text
+                            font: parent.font
+                        }
+
+                        background: Rectangle{
+                            color: parent.checked ? accent_color: medium_color
+                            opacity: parent.down ? 0.75: 1
+                            radius: 3
+                        }
+
+                        onClicked: {
+                        }
+                    }TabButton{
+                        id: partOfListBtn
+                        text: "Partie de la liste"
+                        width: implicitWidth
+
+                        contentItem: Text{
+                            color: parent.checked ? light_text_color: medium_text_color
+                            text: parent.text
+                            font: parent.font
+                        }
+
+                        background: Rectangle{
+                            color: parent.checked ? accent_color: medium_color
+                            opacity: parent.down ? 0.75: 1
+                            radius: 3
+                        }
+
+                        onClicked: {
+                        }
+                    }
+                }
+            }
+
+            Item{height: 1; width: 5}
+
+            Rectangle{
+                id: nbWordSelectorContainer
+
+                height: nbWordSelectorInput.height + 12
+                width: 40
+
+                color: medium_color
+                opacity: if(partOfListBtn.checked){1}else{0.6}
+
+                radius: 3
+                anchors.top: parent.top
+                anchors.topMargin: nbWordSelectorLabel.height + 5
+
+                TextInput{
+                    id: nbWordSelectorInput
+
+                    text: "10"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.leftMargin: 5
+                    anchors.rightMargin: 5
+
+                    color: light_text_color
+                    opacity: if(partOfListBtn.checked){1}else{0.6}
+                    readOnly: if(partOfListBtn.checked){false}else{true}
+
+                    validator: IntValidator {bottom: 1; top: 9999}
+
+                    maximumLength: 4
+                    selectedTextColor: "#000000"
+                    selectionColor: accent_color
+                }
+            }
         }
 
         Rectangle{
@@ -426,8 +550,8 @@ Item {
                 }
 
                 Label{
-                    id: nbMistakeLabelHistory
-                    text: "Nombre d'erreur"
+                    id: scoreLabelHistory
+                    text: "Score"
                     color: medium_text_color
 
                     anchors.left: timeLabelHistory.right
@@ -448,7 +572,7 @@ Item {
                     text: "Erreur"
                     color: medium_text_color
 
-                    anchors.left: nbMistakeLabelHistory.right
+                    anchors.left: scoreLabelHistory.right
                     anchors.right: parent.right
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
@@ -521,6 +645,8 @@ Item {
                 onClicked: {
                     var mode = "" // write or QCM
                     var direction = "" // default (definition => mot); opposite (mot => definition); random
+                    var scope = "" // all; last; int
+                    var ok = true
 
                     if(ecrireBtn.checked){
                         mode = "write"
@@ -537,8 +663,37 @@ Item {
                         direction = "opposite"
                     }
 
-                    stackView.replace(Qt.resolvedUrl("../pages/RevisionPage.qml"))
-                    backend.start_revision(currentList, mode, direction)
+                    if(allListBtn.checked){
+                        scope = "all"
+                    }else if(lastTimeBtn.checked){
+                        if(noData.visible){
+                            popUp.popUpText = "Vous n'avez jamais révisé cette liste"
+                            showPopUp.running = true
+                            ok = false
+                        }
+                        else{
+                            scope = "last"
+                        }
+                    }else{
+                        if(nbWordSelectorInput.text === "0" || nbWordSelectorInput.text === "00" || nbWordSelectorInput.text === "000" || nbWordSelectorInput.text === "0000"){
+                            popUp.popUpText = "Vous ne pouvez pas réviser 0 mot"
+                            showPopUp.running = true
+                            ok = false
+                        }else if(parseInt(nbWordSelectorInput.text) < 4){
+                            popUp.popUpText = "Vous devez réviser au moins 4"
+                            showPopUp.running = true
+                            ok = false
+                        }else if(parseInt(nbWordSelectorInput.text) >= nbWord){
+                            scope = "all"
+                        }else{
+                            scope = nbWordSelectorInput.text
+                        }
+                    }
+
+                    if(ok){
+                        stackView.replace(Qt.resolvedUrl("../pages/RevisionPage.qml"))
+                        backend.start_revision(currentList, mode, direction, scope)
+                    }
                 }
             }
         }

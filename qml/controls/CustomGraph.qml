@@ -50,9 +50,9 @@ Item {
             if(lvs[indexHover][3] === 0){
                 nbMistakePopUp.text = "aucune erreurs"
             }else if(lvs[indexHover][3] === 1){
-                nbMistakePopUp.text = `${lvs[indexHover][3]} erreur`
+                nbMistakePopUp.text = `${lvs[indexHover][3]}`
             }else{
-                nbMistakePopUp.text = `${lvs[indexHover][3]} erreurs`
+                nbMistakePopUp.text = `${lvs[indexHover][3]}`
             }
         }
 
@@ -189,8 +189,8 @@ Item {
             id: popupHistory
 
             color: darker_color
-            height: 150
-            width: 165
+            height: datePopUp.height + modePopUp.height + directionPopUp.height + lvPopUp.height + nbMistakePopUp.height + timeSpendPopUp.height + 45
+            width: 180
             visible: false
             opacity: .93
             radius: 10

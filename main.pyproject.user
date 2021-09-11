@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.14.2, 2021-08-30T16:02:11. -->
+<!-- Written by QtCreator 4.14.2, 2021-09-10T22:10:55. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -172,6 +172,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.D:/perso/Dev/python/projets/09_voca_list/voca-liste/main.py</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">D:/perso/Dev/python/projets/09_voca_list/voca-liste/main.py</value>
+    <value type="bool" key="PythonEditor.RunConfiguation.Buffered">true</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">{866da15b-8a5a-414b-8d6c-799ef917b598}</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Script">D:\perso\Dev\python\projets\09_voca_list\voca-liste\main.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
