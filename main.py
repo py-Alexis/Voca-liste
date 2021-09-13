@@ -671,9 +671,9 @@ class MainWindow(QObject):
         history.append(int(time_spend.total_seconds()))
         history.append(revision_mode)
         history.append(revision_direction)
-        history.append(word_list_shuffle)
         if len(word_list_shuffle) != len(word_list):
-            content_liste["historique"].append(history)
+            history.append(word_list_shuffle)
+        content_liste["historique"].append(history)
         self.write(content_liste, liste)
 
         # initialize resultPage
