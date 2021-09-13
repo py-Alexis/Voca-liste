@@ -1,7 +1,5 @@
 import re
 from random import shuffle
-import json
-from pprint import pprint
 
 # -------------------------------------
 # ------------ CHECK WORD -------------
@@ -94,15 +92,4 @@ def revise_part_of_list(word_list, n):
         lv += 1
         print(lv)
     return word_list_final
-
-
-if __name__ == "__main__":
-    with open("D:\perso\Dev\python\projets/09_voca_list/voca-liste\listes\liste de test.json", "r", encoding="utf-8") as f:
-        liste_content = json.load(f)
-
-    variable = revise_last(liste_content["historique"],liste_content["liste"])
-    pprint(variable)
-    print(len(variable))
-
-
 
